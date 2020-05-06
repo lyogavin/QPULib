@@ -137,6 +137,10 @@ HeatMap: HeatMap.o $(LIB)
 	@echo Linking...
 	@$(CXX) $^ -o $@ $(CXX_FLAGS)
 
+TestSgemm: TestSgemm.o $(LIB)
+	@echo Linking...
+	@$(CXX) $^ -o $@ $(CXX_FLAGS)
+
 # Intermediate targets
 
 $(OBJ_DIR)/%.o: $(ROOT)/%.cpp $(OBJ_DIR)

@@ -88,16 +88,20 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* bias, int w, int h, int inch, int outch, int elemsize)
 {
     int padding = 16;
-    int total = w * h * elemsize;
+    int total = w * h;
     int NQPUS = 12;
     // 1. copy data to shared memeory...
+    printf("alloc bottom");
     SharedArray<float> bottom_shar(total * inch + padding);
-    memcpy(bottom_shar.getPointer(), bottom_blob, total * inch);
+    memcpy(bottom_shar.getPointer(), bottom_blob, total * inch * elemsize);
+    printf("alloc top");
     SharedArray<float> top_shar(total * outch + padding);
-    memcpy(top_shar.getPointer(), top_blob, total * outch);
-    SharedArray<float> kernel_shar(inch * outch * elemsize + padding);
+    memcpy(top_shar.getPointer(), top_blob, total * outch * elemsize);
+    printf("alloc kernel");
+    SharedArray<float> kernel_shar(inch * outch + padding);
     memcpy(kernel_shar.getPointer(), kernel, inch * outch * elemsize);
-    SharedArray<float> bias_shar(outch * elemsize + padding);
+    printf("alloc bias");
+    SharedArray<float> bias_shar(outch + padding);
     memcpy(bias_shar.getPointer(), bias, outch * elemsize);
 
     // Compile kernel

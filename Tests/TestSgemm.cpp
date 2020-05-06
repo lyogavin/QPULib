@@ -57,7 +57,7 @@ int main()
 
   gettimeofday(&tvStart, NULL);
 
-  conv1x1s1_sgemm_cpu(bot, top, ker, bias, w, h, inch, outch);
+  conv1x1s1_sgemm_cpu(bot, topcpu, ker, bias, w, h, inch, outch);
 
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);
@@ -67,7 +67,7 @@ int main()
 
   gettimeofday(&tvStart, NULL);
 
-  conv1x1s1_sgemm_qpu(bot, topcpu, ker, bias, w, h, inch, outch, sizeof(float));
+  conv1x1s1_sgemm_qpu(bot, top, ker, bias, w, h, inch, outch, sizeof(float));
 
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);

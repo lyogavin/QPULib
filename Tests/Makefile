@@ -152,3 +152,5 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)/Source
 	@mkdir -p $(OBJ_DIR)/Target
 	@mkdir -p $(OBJ_DIR)/VideoCore
+	@mkdir -p $(OBJ_DIR)/App
+

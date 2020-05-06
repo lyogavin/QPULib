@@ -4,7 +4,7 @@
 
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
-                                   int w, int h, int inch, int outch, int elemsize)
+                                   Int w, Int h, Int inch, Int outch, Int elemsize)
 {
     // 1. multiple QPU...
     Int outch_inc = numQPUs();

@@ -35,8 +35,10 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             gather(top_ptr);
 
             For (i = 0, i + inc - 1 < w * h, i = i + inc)
-                gather(bottom_ptr + inc);
-                gather(top_ptr + inc);
+                If (i + inc + inc - 1 < w * h)
+                    gather(bottom_ptr + inc);
+                    gather(top_ptr + inc);
+                End
                 receive(bottom_last);
                 receive(top_last);
 
@@ -47,8 +49,8 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             End
 
             // gather the rest one by one
-            receive(bottom_last);
-            receive(top_last);
+            //receive(bottom_last);
+            //receive(top_last);
 
             //i =  i - inc + 1;
 
@@ -61,21 +63,22 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Float top_last_by_one;
 
             For (, i < w * h, i = i + 1)
-                gather(bottom_ptr_by_one + 1);
-                gather(top_ptr_by_one + 1);
+                If (i + 1 < w * h)
+                    gather(bottom_ptr_by_one + 1);
+                    gather(top_ptr_by_one + 1);
+                End
                 receive(bottom_last_by_one);
                 receive(top_last_by_one);
 
                 store(bottom_last_by_one * kernel_last + top_last_by_one, top_ptr_by_one);
-
                 bottom_ptr_by_one = bottom_ptr_by_one + 1;
                 top_ptr_by_one = top_ptr_by_one + 1;
             End
-            receive(bottom_last_by_one);
-            receive(top_last_by_one);
+            //receive(bottom_last_by_one);
+            //receive(top_last_by_one);
 
             kernel_ptr = kernel_ptr + 1;
-            bias_ptr = bias_ptr + 1;
+            //bias_ptr = bias_ptr + 1;
         End
     End
 

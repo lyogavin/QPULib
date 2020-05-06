@@ -86,7 +86,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 }
 
 
-void memcpy_shared(SharedArray<float> dest, float* src, unsigned size)
+void memcpy_shared(SharedArray<float>& dest, float* src, unsigned size)
 {
     for (int i =0; i<size; i++){
         dest[i] = src[i];

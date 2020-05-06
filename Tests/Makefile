@@ -66,6 +66,32 @@ clean:
 
 LIB = $(patsubst %,$(OBJ_DIR)/%,$(OBJ))
 
+ALIB: libQPULib.a
+
+#PREFIX is environment variable, but if it is not set, then set default value
+ifeq ($(PREFIX),)
+    PREFIX := /usr/local
+endif
+
+install: libQPULib.a
+	install -d $(DESTDIR)$(PREFIX)/lib/
+	install -m 644 libQPULib.a $(DESTDIR)$(PREFIX)/lib/
+	install -d $(DESTDIR)$(PREFIX)/include/
+	install -d $(DESTDIR)$(PREFIX)/include/Source/
+	install -d $(DESTDIR)$(PREFIX)/include/Target/
+	install -d $(DESTDIR)$(PREFIX)/include/Common/
+	install -d $(DESTDIR)$(PREFIX)/include/VideoCore/
+	install -m 644 ../Lib/*.h $(DESTDIR)$(PREFIX)/include/
+	install -m 644 ../Lib/Source/*.h $(DESTDIR)$(PREFIX)/include/Source/
+	install -m 644 ../Lib/Common/*.h $(DESTDIR)$(PREFIX)/include/Common/
+	install -m 644 ../Lib/Target/*.h $(DESTDIR)$(PREFIX)/include/Target/
+	install -m 644 ../Lib/VideoCore/*.h $(DESTDIR)$(PREFIX)/include/VideoCore/
+
+
+
+libQPULib.a: $(LIB)
+	ar rcs $@ $^
+
 Hello: Hello.o $(LIB)
 	@echo Linking...
 	@$(CXX) $^ -o $@ $(CXX_FLAGS)

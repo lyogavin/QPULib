@@ -95,7 +95,7 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
     SharedArray<float> bottom_shar(total * inch + padding);
     memcpy(bottom_shar.getPointer(), bottom_blob, total * inch);
     SharedArray<float> top_shar(total * outch + padding);
-    memcpy(top_shar.getPointer(), top_blob, total * outch)
+    memcpy(top_shar.getPointer(), top_blob, total * outch);
     SharedArray<float> kernel_shar(inch * outch * elemsize + padding);
     memcpy(kernel_shar.getPointer(), kernel, inch * outch * elemsize);
     SharedArray<float> bias_shar(outch * elemsize + padding);

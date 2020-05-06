@@ -1,7 +1,6 @@
 #include "App/Sgemm.h"
 
-#include <string>
-
+#include <cstring>
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                                    Int w, Int h, Int inch, Int outch, Int elemsize)

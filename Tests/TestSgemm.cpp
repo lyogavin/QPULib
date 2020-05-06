@@ -1,6 +1,11 @@
 #include <QPULib.h>
 #include <cstring>
 
+#include <cstdlib>
+
+#include <ctime>
+using namespace std;
+
 
 // ============================================================================
 // Main
@@ -35,6 +40,14 @@ float get_diff(float* input, float* output, int size) {
     return diff;
 }
 
+void fill_rand(float* dest, int size)
+{
+    for(int i =0; i<size;i++)
+    {
+        dest[i] = rand()/float(RAND_MAX);
+    }
+}
+
 int main()
 {
   // Timestamps
@@ -48,12 +61,19 @@ int main()
   const int w = 10, h=10, inch=10, outch=10,elemsize=4;
 
   float* bot = new float[w*h*inch];
+  fill_rand(bot, w*h*inch)
   float* top = new float[w*h*outch];
+  fill_rand(top, w*h*outch)
   float* ker = new float[outch*inch];
+  fill_rand(ker, outch*inch)
   float* bias = new float[outch];
+  fill_rand(bias, outch)
 
   float* topcpu = new float[w*h*outch];
   //memcpy(topcpu, top, w*h*outch*sizeof(float));
+
+  srand(time(0));
+
 
 
   gettimeofday(&tvStart, NULL);

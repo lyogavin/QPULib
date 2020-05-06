@@ -10,7 +10,7 @@ OBJ_DIR = obj
 
 # Debug mode
 ifeq ($(DEBUG), 1)
-  CXX_FLAGS += -DDEBUG
+  CXX_FLAGS += -DDEBUG -g
   OBJ_DIR := $(OBJ_DIR)-debug
 endif
 
@@ -63,7 +63,7 @@ top:
 clean:
 	rm -rf obj obj-debug obj-qpu obj-debug-qpu
 	rm -f Tri GCD Print MultiTri AutoTest OET Hello ReqRecv Rot3D ID *.o
-	rm -f HeatMap
+	rm -f HeatMap TestSgemm
 
 LIB = $(patsubst %,$(OBJ_DIR)/%,$(OBJ))
 

@@ -39,6 +39,7 @@ int main()
 {
   // Timestamps
   timeval tvStart, tvEnd, tvDiff;
+  timeval tvStartQpu, tvEndQpu, tvDiffQpu;
 
   // Number of vertices and angle of rotation
   const int N = 19200; // 192000
@@ -65,13 +66,13 @@ int main()
   printf("cpu: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
 
-  gettimeofday(&tvStart, NULL);
+  gettimeofday(&tvStartQpu, NULL);
 
   printf("starting conv1x1s1_sgemm_qpu");
   conv1x1s1_sgemm_qpu(bot, top, ker, bias, w, h, inch, outch, sizeof(float));
 
-  gettimeofday(&tvEnd, NULL);
-  timersub(&tvEnd, &tvStart, &tvDiff);
+  gettimeofday(&tvEndQpu, NULL);
+  timersub(&tvEndQpu, &tvStartQpu, &tvDiffQpu);
 
   // Display results
   //for (int i = 0; i < N; i++)
@@ -79,7 +80,7 @@ int main()
 
   float diff = get_diff(top, topcpu, w*h*outch);
  
-  printf("QPU: diff: %f, %ld.%06lds\n", diff, tvDiff.tv_sec, tvDiff.tv_usec);
+  printf("QPU: diff: %f, %ld.%06lds\n", diff, tvDiffQpu.tv_sec, tvDiffQpu.tv_usec);
 
   delete bot;
   delete top;

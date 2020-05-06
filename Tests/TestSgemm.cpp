@@ -86,7 +86,7 @@ int main()
   printf("cpu: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
 
-  topcpu[3] = 10.0f;
+  //topcpu[3] = 10.0f;
 
 
   gettimeofday(&tvStartQpu, NULL);

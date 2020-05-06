@@ -66,6 +66,9 @@ int main()
   printf("cpu: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
 
+  topcpu[3] = 10.0f;
+
+
   gettimeofday(&tvStartQpu, NULL);
 
   printf("starting conv1x1s1_sgemm_qpu");

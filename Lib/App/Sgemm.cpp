@@ -85,6 +85,14 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     //receive(top_last);
 }
 
+
+void memcpy_shared(SharedArray<float> dest, float* src, unsigned size)
+{
+    for (int i =0; i<size; i++){
+        dest[i] = src[i];
+    }
+}
+
 void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* bias, int w, int h, int inch, int outch, int elemsize)
 {
     int padding = 16;
@@ -93,16 +101,16 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
     // 1. copy data to shared memeory...
     printf("alloc bottom");
     SharedArray<float> bottom_shar(total * inch + padding);
-    memcpy(bottom_shar.getPointer(), bottom_blob, total * inch * elemsize);
+    memcpy_shared(bottom_shar, bottom_blob, total * inch);
     printf("alloc top");
     SharedArray<float> top_shar(total * outch + padding);
-    memcpy(top_shar.getPointer(), top_blob, total * outch * elemsize);
+    memcpy_shared(top_shar, top_blob, total * outch);
     printf("alloc kernel");
     SharedArray<float> kernel_shar(inch * outch + padding);
-    memcpy(kernel_shar.getPointer(), kernel, inch * outch * elemsize);
+    memcpy_shared(kernel_shar, kernel, inch * outch);
     printf("alloc bias");
     SharedArray<float> bias_shar(outch + padding);
-    memcpy(bias_shar.getPointer(), bias, outch * elemsize);
+    memcpy_shared(bias_shar, bias, outch);
 
     // Compile kernel
     auto k = compile(conv1x1s1_sgemm_qpulib);

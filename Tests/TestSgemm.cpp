@@ -46,13 +46,13 @@ int main()
 
   const int w = 10, h=10, inch=10, outch=10,elemsize=4;
 
-  float* bot = new float(w*h*inch);
-  float* top = new float(w*h*outch);
-  float* ker = new float(outch*inch);
-  float* bias = new float(outch);
+  float* bot = new float[w*h*inch];
+  float* top = new float[w*h*outch];
+  float* ker = new float[outch*inch];
+  float* bias = new float[outch];
 
-  float* topcpu = new float(w*h*outch);
-  memcpy(topcpu, top, w*h*outch);
+  float* topcpu = new float[w*h*outch];
+  //memcpy(topcpu, top, w*h*outch*sizeof(float));
 
 
   gettimeofday(&tvStart, NULL);

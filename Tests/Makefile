@@ -49,7 +49,8 @@ OBJ =                         \
   Target/Encode.o             \
   VideoCore/Mailbox.o         \
   VideoCore/Invoke.o          \
-  VideoCore/VideoCore.o
+  VideoCore/VideoCore.o       \
+  App/Sgemm.o
 
 # Top-level targets
 

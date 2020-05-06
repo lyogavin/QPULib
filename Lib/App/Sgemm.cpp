@@ -1,5 +1,7 @@
 #include "App/Sgemm.h"
 
+#include <string.h>
+
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                                    int w, int h, int inch, int outch, int elemsize)
@@ -14,11 +16,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     Float top_last;
     Float bias_last;
 
-    For (Int k = me(), k < outch, k += outch_inc)
+    For (Int k = me(), k < outch, k = k + outch_inc)
         Ptr<Float> kernel_ptr = kernel + k * inch;
         Ptr<Float> bias_ptr = bias + k;
 
-        For (Int j = 0, j < inch, j += 1)
+        For (Int j = 0, j < inch, j = j + 1)
             Ptr<Float> top_ptr = top + index() + k * w * h;
 
             gather(kernel_ptr);
@@ -33,7 +35,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             gather(bottom_ptr);
             gather(top_ptr);
 
-            For (i = 0, i < w * h, i += inc)
+            For (i = 0, i < w * h, i = i + inc)
                 gather(bottom_ptr + inc);
                 gather(top_ptr + inc);
                 receive(bottom_last);
@@ -59,7 +61,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Float bottom_last_by_one;
             Float top_last_by_one;
 
-            For (, i < w * h, i += 1)
+            For (, i < w * h, i = i + 1)
                 gather(bottom_ptr_by_one + 1);
                 gather(top_ptr_by_one + 1);
                 receive(bottom_last_by_one);
@@ -88,6 +90,7 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
 {
     int padding = 16;
     int total = w * h * elemsize;
+    int NQPUS = 12;
     // 1. copy data to shared memeory...
     SharedArray<float> bottom_shar(total * inch + padding);
     memcpy(bottom_shar.getPointer(), bottom_blob, total * inch)

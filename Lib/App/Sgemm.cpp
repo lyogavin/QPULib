@@ -62,8 +62,8 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Float bottom_last_by_one;
             Float top_last_by_one;
 
-            For (, i < w * h, i = i + 1)
-                If (i + 1 < w * h)
+            For (Int m = i, m < w * h, m = m + 1)
+                If (m + 1 < w * h)
                     gather(bottom_ptr_by_one + 1);
                     gather(top_ptr_by_one + 1);
                 End

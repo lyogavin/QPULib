@@ -67,6 +67,7 @@ int main()
 
   gettimeofday(&tvStart, NULL);
 
+  printf("starting conv1x1s1_sgemm_qpu");
   conv1x1s1_sgemm_qpu(bot, top, ker, bias, w, h, inch, outch, sizeof(float));
 
   gettimeofday(&tvEnd, NULL);

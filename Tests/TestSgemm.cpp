@@ -67,7 +67,7 @@ int main()
 
   gettimeofday(&tvStart, NULL);
 
-  conv1x1s1_sgemm_gpu(botcpu, topcpu, kercpu, biascpu, w, h, inch, outch, sizeof(float));
+  conv1x1s1_sgemm_qpu(botcpu, topcpu, kercpu, biascpu, w, h, inch, outch, sizeof(float));
 
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);

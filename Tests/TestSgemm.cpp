@@ -55,7 +55,6 @@ int main()
   timeval tvStartQpu, tvEndQpu, tvDiffQpu;
 
   // Number of vertices and angle of rotation
-  const int N = 19200; // 192000
   const float THETA = (float) 3.14159;
 
   const int w = 10, h=10, inch=10, outch=10,elemsize=4;
@@ -98,8 +97,9 @@ int main()
   timersub(&tvEndQpu, &tvStartQpu, &tvDiffQpu);
 
   // Display results
-  //for (int i = 0; i < N; i++)
-  //  printf("%f %f\n", x[i], y[i]);
+  const int N = 20; // 192000
+  for (int i = 0; i < N; i++)
+      printf("top:%f topcpu:%f\n", top[i], topcpu[i]);
 
   float diff = get_diff(top, topcpu, w*h*outch);
  

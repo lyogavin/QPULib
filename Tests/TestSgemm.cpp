@@ -51,23 +51,23 @@ int main()
   float* ker = new float(outch*inch);
   float* bias = new float(outch);
 
-
-  float* botcpu = new float(w*h*inch);
-  memcpy(botcpu, bot, w*h*inch);
   float* topcpu = new float(w*h*outch);
   memcpy(topcpu, top, w*h*outch);
-  float* kercpu = new float(outch*inch);
-  memcpy(kercpu, ker, outch*inch);
-  float* biascpu = new float(outch);
-  memcpy(biascpu, bias, outch);
-
-  conv1x1s1_sgemm_cpu(bot, top, ker, bias, w, h, inch, outch);
-
 
 
   gettimeofday(&tvStart, NULL);
 
-  conv1x1s1_sgemm_qpu(botcpu, topcpu, kercpu, biascpu, w, h, inch, outch, sizeof(float));
+  conv1x1s1_sgemm_cpu(bot, top, ker, bias, w, h, inch, outch);
+
+  gettimeofday(&tvEnd, NULL);
+  timersub(&tvEnd, &tvStart, &tvDiff);
+
+  printf("cpu: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
+
+
+  gettimeofday(&tvStart, NULL);
+
+  conv1x1s1_sgemm_qpu(bot, topcpu, ker, bias, w, h, inch, outch, sizeof(float));
 
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);
@@ -78,7 +78,13 @@ int main()
 
   float diff = get_diff(top, topcpu, w*h*outch);
  
-  printf("diff: %f, %ld.%06lds\n", diff, tvDiff.tv_sec, tvDiff.tv_usec);
+  printf("QPU: diff: %f, %ld.%06lds\n", diff, tvDiff.tv_sec, tvDiff.tv_usec);
+
+  delete bot;
+  delete top;
+  delete ker;
+  delete bias;
+  delete topcpu;
 
   return 0;
 }

@@ -23,8 +23,8 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Ptr<Float> top_ptr = top + index() + k * w * h;
 
             gather(kernel_ptr);
-            receive(kernel_last);
             gather(bias_ptr);
+            receive(kernel_last);
             receive(bias_last);
 
             Int i  = 0;
@@ -50,7 +50,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(bottom_last);
             receive(top_last);
 
-            i =  i - inc;
+            i =  i - inc + 1;
 
             Ptr<Float> bottom_ptr_by_one = bottom + i + w * h * j;
             gather(bottom_ptr_by_one);

@@ -17,7 +17,7 @@ void conv1x1s1_sgemm_cpu(float* bottom_blob, float* top_blob, float* kernel, flo
             }
             for (int i = 0; i < w; i++) {
                 for (int l = 0; l < h; l++) {
-                    top_blob[w*h*k + w*l + i] += bottom_blob[w*h*j + w*l + i] * kernel[k * inch + j]
+                    top_blob[w*h*k + w*l + i] += bottom_blob[w*h*j + w*l + i] * kernel[k * inch + j];
                 }
             }
         }
@@ -29,7 +29,7 @@ void conv1x1s1_sgemm_cpu(float* bottom_blob, float* top_blob, float* kernel, flo
 float get_diff(float* input, float* output, int size) {
     float diff = 0;
     for(int i = 0;i < size;i++) {
-        diff += output[i] - intput[i];
+        diff += output[i] - input[i];
     }
 
     return diff;
@@ -46,28 +46,28 @@ int main()
 
   const int w = 10, h=10, inch=10, outch=10,elemsize=4;
 
-  float* bot = new(w*h*inch);
-  float* top = new(w*h*outch);
-  float* ker = new(outch*inch);
-  float* bias = new(outch);
+  float* bot = new float(w*h*inch);
+  float* top = new float(w*h*outch);
+  float* ker = new float(outch*inch);
+  float* bias = new float(outch);
 
 
-  float* botcpu = new(w*h*inch);
-  memcpy(botcpu, bot);
-  float* topcpu = new(w*h*outch);
-  memcpy(topcpu, top);
-  float* kercpu = new(outch*inch);
-  memcpy(kercpu, ker);
-  float* biascpu = new(outch);
-  memcpy(biascpu, bias);
+  float* botcpu = new float(w*h*inch);
+  memcpy(botcpu, bot, w*h*inch);
+  float* topcpu = new float(w*h*outch);
+  memcpy(topcpu, top, w*h*outch);
+  float* kercpu = new float(outch*inch);
+  memcpy(kercpu, ker, outch*inch);
+  float* biascpu = new float(outch);
+  memcpy(biascpu, bias, outch);
 
-  conv1x1s1_sgemm_cpu(bot, top, ker, bias, w, h, inch, outch, sizeof(float));
+  conv1x1s1_sgemm_cpu(bot, top, ker, bias, w, h, inch, outch);
 
 
 
   gettimeofday(&tvStart, NULL);
 
-  conv1x1s1_sgemm_cpu(botcpu, topcpu, kercpu, biascpu, w, h, inch, outch);
+  conv1x1s1_sgemm_gpu(botcpu, topcpu, kercpu, biascpu, w, h, inch, outch, sizeof(float));
 
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);

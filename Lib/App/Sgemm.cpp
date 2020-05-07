@@ -76,7 +76,13 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Print("\n");
                 //End
                 receive(bottom_last);
+                Print("receive inside :");
+                Print("bottom_last + inc");
+                Print("\n");
                 receive(top_last);
+                Print("receive inside :");
+                Print("top_last + inc");
+                Print("\n");
 
                 If (j == 0)
                     store(bottom_last * kernel_last + bias_last, top_ptr);
@@ -89,7 +95,13 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             // gather the rest one by one
             receive(bottom_last);
+            Print("receive:");
+            Print("bottom_last");
+            Print("\n");
             receive(top_last);
+            Print("receive:");
+            Print("top_last");
+            Print("\n");
 
             //top_last = *top_ptr;
 

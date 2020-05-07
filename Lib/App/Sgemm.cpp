@@ -58,6 +58,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(bottom_last);
             receive(top_last);
 
+            Print("top_last");
+            Print(toInt(top_last))
+
             If (last_i + 1 < w * h)
                 Int left_len = w * h - last_i - 1;
                 Float all_one = 1.0f;
@@ -66,6 +69,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Where(index() < left_len)
                     all_zero = all_one;
                 End
+
 
                 If (j == 0)
                     store(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);

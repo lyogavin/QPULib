@@ -75,7 +75,7 @@ int main()
   float* ker = new float[outch*inch];
   fill_rand(ker, outch*inch);
   float* bias = new float[outch];
-  //fill_rand(bias, outch);
+  fill_rand(bias, outch);
 
   float* topcpu = new float[w*h*outch];
   memcpy(topcpu, top, w*h*outch*4);

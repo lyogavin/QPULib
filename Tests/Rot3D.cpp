@@ -124,8 +124,8 @@ int main()
   timersub(&tvEnd, &tvStart, &tvDiff);
 
   // Display results
-  //for (int i = 0; i < N; i++)
-  //  printf("%f %f\n", x[i], y[i]);
+  for (int i = 0; i < N; i++)
+    printf("%f %f\n", x[i], y[i]);
  
   printf("%ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 

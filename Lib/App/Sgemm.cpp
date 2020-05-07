@@ -62,6 +62,15 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(bottom_last);
             receive(top_last);
 
+            Print("j:");
+            Print(j);
+            Print("\n");
+
+            Print("last_i+1:");
+            Print(last_i+1);
+            Print("\n");
+
+
             Print("top_last");
             Print(toInt(top_last));
             Print("\n");

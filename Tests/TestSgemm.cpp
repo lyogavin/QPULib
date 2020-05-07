@@ -80,6 +80,8 @@ int main()
   float* topcpu = new float[w*h*outch];
   memcpy(topcpu, top, w*h*outch*4);
 
+  float* debug_output = new float[100];
+
   srand(time(0));
 
 
@@ -100,7 +102,7 @@ int main()
   gettimeofday(&tvStartQpu, NULL);
 
   printf("starting conv1x1s1_sgemm_qpu");
-  conv1x1s1_sgemm_qpu(bot, top, ker, bias, w, h, inch, outch, sizeof(float));
+  conv1x1s1_sgemm_qpu(bot, top, ker, bias, debug_output, 100, w, h, inch, outch, sizeof(float));
 
   gettimeofday(&tvEndQpu, NULL);
   timersub(&tvEndQpu, &tvStartQpu, &tvDiffQpu);
@@ -109,6 +111,10 @@ int main()
   const int N = 1; // 192000
   for (int i = 0; i < N; i++)
       printf("top:%f topcpu:%f\n", top[i], topcpu[i]);
+
+  for (int i =0;i<50;i++)
+      printf("offset: %d, value: %f", int(debug_output[2*i]), debug_output[2*i+1])
+
 
   float diff = get_diff(top, topcpu, w*h*outch);
  

@@ -16,14 +16,18 @@ void conv1x1s1_sgemm_cpu(float* bottom_blob, float* top_blob, float* kernel, flo
 {
     for (int k = 0; k < outch; k++) {
         for (int j = 0; j < inch; j++) {
-            for (int i = 0; i < w; i++) {
+            /*for (int i = 0; i < w; i++) {
                 for (int l = 0; l < h; l++) {
                     top_blob[w*h*k + w*l + i] = bias[k];
                 }
-            }
+            }*/
             for (int i = 0; i < w; i++) {
                 for (int l = 0; l < h; l++) {
-                    top_blob[w*h*k + w*l + i] += bottom_blob[w*h*j + w*l + i] * kernel[k * inch + j];
+                    if (j == 0) {
+                        top_blob[w*h*k + w*l + i] = bottom_blob[w*h*j + w*l + i] * kernel[k * inch + j] + bias[k];
+                    } else {
+                        top_blob[w*h*k + w*l + i] += bottom_blob[w*h*j + w*l + i] * kernel[k * inch + j];
+                    }
                 }
             }
         }

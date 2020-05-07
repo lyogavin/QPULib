@@ -59,12 +59,13 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(top_last);
 
             If (last_i + 1 < w * h)
+                Int left_len = w * h - last_i - 1;
                 If (j == 0)
-                    Where(index() < w * h - last_i)
+                    Where(index() < left_len)
                         store(bottom_last * kernel_last + bias_last, top_ptr);
                     End
                 Else
-                    Where(index() < w * h - last_i)
+                    Where(index() < left_len)
                         store(bottom_last * kernel_last + top_last, top_ptr);
                     End
                 End

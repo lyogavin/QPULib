@@ -8,6 +8,10 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     // 1. multiple QPU...
     Int outch_inc = numQPUs();
 
+    Print("numQPUs:");
+    Print(outch_inc);
+    Print("\n")
+
     Int inc = 16;//numQPUs() << 4;
 
     Float bottom_last;

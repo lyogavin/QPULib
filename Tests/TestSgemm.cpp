@@ -34,7 +34,11 @@ void conv1x1s1_sgemm_cpu(float* bottom_blob, float* top_blob, float* kernel, flo
 float get_diff(float* input, float* output, int size) {
     float diff = 0;
     for(int i = 0;i < size;i++) {
-        diff += output[i] - input[i];
+        single_diff = output[i] - input[i];
+        if (single_diff > 0.0001f){
+            printf("diff pos: %d", i);
+        }
+        diff += single_diff;
     }
 
     return diff;

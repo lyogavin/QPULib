@@ -4,7 +4,7 @@
 
 
 #define _output(f) If (output_offset < debug_output_size) *(debug_output + output_offset) = f;End; output_offset = output_offset + 1;
-#define output(f) _output(output_offset);_output(toFloat(f));
+#define output(f) _output(toFloat(output_offset));_output(f);
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                             Ptr<Float> debug_output, Int debug_output_size,

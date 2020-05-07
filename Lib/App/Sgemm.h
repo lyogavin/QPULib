@@ -5,4 +5,6 @@
 
 
 
-void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, float* bias, int w, int h, int inch, int outch, int elemsize);
+void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, float* bias,
+    float* debug_output, int debug_output_size,
+    int w, int h, int inch, int outch, int elemsize);

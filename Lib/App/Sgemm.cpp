@@ -96,10 +96,18 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 }
 
 
-void memcpy_shared(SharedArray<float>* dest, float* src, unsigned size)
+void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned size)
 {
     for (int i =0; i<size; i++){
         (*dest)[i] = src[i];
+    }
+}
+
+
+void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned size)
+{
+    for (int i =0; i<size; i++){
+        dest[i] = (*src)[i];
     }
 }
 
@@ -130,5 +138,7 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
     k.setNumQPUs(NQPUS);
 
     k(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, w, h, inch, outch, elemsize);
+
+    memcpy_from_shared(top_blob, top_shar, total*outch);
 
 }

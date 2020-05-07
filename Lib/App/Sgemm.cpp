@@ -119,16 +119,16 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
     // 1. copy data to shared memeory...
     printf("alloc bottom");
     SharedArray<float> bottom_shar(total * inch + padding);
-    memcpy_shared(&bottom_shar, bottom_blob, total * inch);
+    memcpy_to_shared(&bottom_shar, bottom_blob, total * inch);
     printf("alloc top");
     SharedArray<float> top_shar(total * outch + padding);
-    memcpy_shared(&top_shar, top_blob, total * outch);
+    memcpy_to_shared(&top_shar, top_blob, total * outch);
     printf("alloc kernel");
     SharedArray<float> kernel_shar(inch * outch + padding);
-    memcpy_shared(&kernel_shar, kernel, inch * outch);
+    memcpy_to_shared(&kernel_shar, kernel, inch * outch);
     printf("alloc bias");
     SharedArray<float> bias_shar(outch + padding);
-    memcpy_shared(&bias_shar, bias, outch);
+    memcpy_to_shared(&bias_shar, bias, outch);
     bias_shar[0] = 2.0f;
 
     // Compile kernel

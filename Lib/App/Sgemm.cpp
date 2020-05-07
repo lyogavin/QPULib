@@ -96,7 +96,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     Print("stored");
                     gather(top_ptr);
                     Float temp;
-                    receive(temp)
+                    receive(temp);
                     Print(toInt(temp));
                     Print("\n");
                 Else
@@ -111,7 +111,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     Print("stored");
                     gather(top_ptr);
                     Float temp;
-                    receive(temp)
+                    receive(temp);
                     Print(toInt(temp));
                     Print("\n");
 

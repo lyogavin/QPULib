@@ -36,13 +36,16 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Ptr<Float> bottom_ptr = bottom + index() + w * h * j;
 
             gather(bottom_ptr);
+            receive(bottom_last);
             gather(top_ptr);
+            receive(top_last);
 
             Int last_i = -1;
 
             Float bottom_last;
             Float top_last;
 
+            /*
             For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
                 last_i = i + inc - 1;
                 //If (i + inc + inc - 1 < w * h)
@@ -59,11 +62,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 End
                 bottom_ptr = bottom_ptr + inc;
                 top_ptr = top_ptr + inc;
-            End
+            End*/
 
             // gather the rest one by one
-            receive(bottom_last);
-            receive(top_last);
+            //receive(bottom_last);
+            //receive(top_last);
 
             //top_last = *top_ptr;
 
@@ -108,9 +111,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     Print("\n");
                     */
 
-                    //tore(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
-                    *top_ptr = all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last;
-                    //store(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
+                    tore(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
+                    //*top_ptr = all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last;
+                    store(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
 
                     /*
                     Print("stored");
@@ -137,9 +140,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     Print("\n");
                     */
 
-                    //store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
-                    *top_ptr = all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last;
-                    //store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
+                    store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
+                    //*top_ptr = all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last;
+                    store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
 
                     /*
                     Print("stored");

@@ -139,6 +139,6 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
 
     k(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, w, h, inch, outch, elemsize);
 
-    memcpy_from_shared(top_blob, top_shar, total*outch);
+    memcpy_from_shared(top_blob, &top_shar, total*outch);
 
 }

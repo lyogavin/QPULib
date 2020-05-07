@@ -120,7 +120,7 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
     memcpy_shared(&kernel_shar, kernel, inch * outch);
     printf("alloc bias");
     SharedArray<float> bias_shar(outch + padding);
-   /memcpy_shared(&bias_shar, bias, outch);
+    memcpy_shared(&bias_shar, bias, outch);
 
     // Compile kernel
     auto k = compile(conv1x1s1_sgemm_qpulib);

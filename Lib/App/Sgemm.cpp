@@ -50,11 +50,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             gather(bottom_ptr);
             Print("gather:");
-            Print(bottom_ptr);
+            Print("bottom_ptr");
             Print("\n");
             gather(top_ptr);
             Print("gather:");
-            Print(top_ptr);
+            Print("top_ptr");
             Print("\n");
 
 
@@ -68,11 +68,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 //If (i + inc + inc - 1 < w * h)
                 gather(bottom_ptr + inc);
                 Print("gather inside :");
-                Print(bottom_ptr + inc);
+                Print("bottom_ptr + inc");
                 Print("\n");
                 gather(top_ptr + inc);
                 Print("gather inside :");
-                Print(top_ptr + inc);
+                Print("top_ptr + inc");
                 Print("\n");
                 //End
                 receive(bottom_last);

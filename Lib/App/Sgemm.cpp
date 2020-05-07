@@ -27,7 +27,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             gather(kernel_ptr);
             receive(kernel_last);
 
-            Int i  = 0;
+            //Int i  = 0;
 
             Ptr<Float> bottom_ptr = bottom + index() + w * h * j;
 
@@ -36,7 +36,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             Int last_i = 0;
 
-            For (i = 0, i + inc - 1 < w * h, i = i + inc)
+            For (Int i = 0, i + inc - 1 < w * h, i = i + inc)
                 last_i = i + inc - 1;
                 //If (i + inc + inc - 1 < w * h)
                 gather(bottom_ptr + inc);

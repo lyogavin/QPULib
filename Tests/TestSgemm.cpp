@@ -44,7 +44,7 @@ void fill_rand(float* dest, int size)
 {
     for(int i =0; i<size;i++)
     {
-        dest[i] = rand()/float(RAND_MAX);
+        dest[i] = 1.0f;//rand()/float(RAND_MAX);
     }
 }
 

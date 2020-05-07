@@ -113,7 +113,7 @@ int main()
       printf("top:%f topcpu:%f\n", top[i], topcpu[i]);
 
   for (int i =0;i<50;i++)
-      printf("offset: %d, value: %f", int(debug_output[2*i]), debug_output[2*i+1]);
+      printf("offset: %d, value: %f\n", int(debug_output[2*i]), debug_output[2*i+1]);
 
 
   float diff = get_diff(top, topcpu, w*h*outch);

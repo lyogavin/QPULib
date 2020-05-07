@@ -58,41 +58,17 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(bottom_last);
             receive(top_last);
 
-            //i =  i - inc + 1;
-
-            Ptr<Float> bottom_ptr_by_one = bottom + last_i + 1 + w * h * j;
-            gather(bottom_ptr_by_one);
-            Ptr<Float> top_ptr_by_one = top + last_i + 1 + k * w * h;
-            gather(top_ptr_by_one);
-
-            Float bottom_last_by_one;
-            Float top_last_by_one;
-
-            For (Int m = last_i + 1, m < (w * h), m = m + 1)
-                //If (m + 1 < w * h)
-                gather(bottom_ptr_by_one + 1);
-                gather(top_ptr_by_one + 1);
-                //End
-                receive(bottom_last_by_one);
-                receive(top_last_by_one);
-
+            If (last_i + 1 < w * h)
                 If (j == 0)
-                    store(bottom_last_by_one * kernel_last + bias_last, top_ptr_by_one);
+                    Where(index() < w * h - last_i)
+                        store(bottom_last * kernel_last + bias_last, top_ptr);
+                    End
                 Else
-
-                    Print("m:");
-                    Print(m);
-                    Print("\n");
-                    Print("top_last_by_one:");
-                    Print(toInt(top_last_by_one));
-                    Print("\n");
-                    store(bottom_last_by_one * kernel_last + top_last_by_one, top_ptr_by_one);
+                    Where(index() < w * h - last_i)
+                        store(bottom_last * kernel_last + top_last, top_ptr);
+                    End
                 End
-                bottom_ptr_by_one = bottom_ptr_by_one + 1;
-                top_ptr_by_one = top_ptr_by_one + 1;
             End
-            receive(bottom_last_by_one);
-            receive(top_last_by_one);
 
             kernel_ptr = kernel_ptr + 1;
             //bias_ptr = bias_ptr + 1;

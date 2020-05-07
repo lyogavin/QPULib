@@ -43,7 +43,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 receive(top_last);
 
                 If (j == 0)
-                    store(bottom_last * kernel_last + top_last + bias_last, top_ptr);
+                    store(bottom_last * kernel_last + bias_last, top_ptr);
                 Else
                     store(bottom_last * kernel_last + top_last, top_ptr);
                 End
@@ -74,7 +74,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 receive(top_last_by_one);
 
                 If (j == 0)
-                    store(bottom_last_by_one * kernel_last + top_last_by_one + bias_last, top_ptr_by_one);
+                    store(bottom_last_by_one * kernel_last + bias_last, top_ptr_by_one);
                 Else
                     store(bottom_last_by_one * kernel_last + top_last_by_one, top_ptr_by_one);
                 End

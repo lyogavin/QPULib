@@ -37,7 +37,7 @@ float get_diff(float* input, float* output, int size) {
     for(int i = 0;i < size;i++) {
         float single_diff = output[i] - input[i];
         if (fabsf(single_diff) > 0.0001f){
-            printf("diff pos: %d", i);
+            printf("diff pos: %d, %f - %f", i, input[i], output[i]);
         }
         diff += single_diff;
     }

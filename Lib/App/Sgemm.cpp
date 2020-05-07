@@ -104,7 +104,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(bottom_last);
             bottom_last = *bottom_ptr;
             Print("receive:");
-            Print(bottom_last);
+            Print(*bottom_last);
             Print("\n");
 
             output(bottom_last);
@@ -112,7 +112,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(top_last);
             top_last = *top_ptr;
             Print("receive:");
-            Print(top_last);
+            Print(*top_last);
             Print("\n");
             output(top_last);
 

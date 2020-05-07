@@ -20,16 +20,16 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     For (Int k = me(), k < outch, k = k + outch_inc)
         Ptr<Float> kernel_ptr = kernel + k * inch;
         Ptr<Float> bias_ptr = bias + k;
-        //gather(bias_ptr);
-        //receive(bias_last);
-        bias_last = *bias_ptr;
+        gather(bias_ptr);
+        receive(bias_last);
+        //bias_last = *bias_ptr;
 
         For (Int j = 0, j < inch, j = j + 1)
             Ptr<Float> top_ptr = top + index() + k * w * h;
 
-            //gather(kernel_ptr);
-            //receive(kernel_last);
-            kernel_last = *kernel_ptr;
+            gather(kernel_ptr);
+            receive(kernel_last);
+            //kernel_last = *kernel_ptr;
 
             //Int i  = 0;
 
@@ -39,14 +39,14 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Float top_last;
 
             gather(bottom_ptr);
-            receive(bottom_last);
             gather(top_ptr);
-            receive(top_last);
+
+
 
             Int last_i = -1;
 
 
-            /*
+
             For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
                 last_i = i + inc - 1;
                 //If (i + inc + inc - 1 < w * h)
@@ -63,11 +63,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 End
                 bottom_ptr = bottom_ptr + inc;
                 top_ptr = top_ptr + inc;
-            End*/
+            End
 
             // gather the rest one by one
-            //receive(bottom_last);
-            //receive(top_last);
+            receive(bottom_last);
+            receive(top_last);
 
             //top_last = *top_ptr;
 

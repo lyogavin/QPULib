@@ -66,7 +66,7 @@ int main()
   // Number of vertices and angle of rotation
   const float THETA = (float) 3.14159;
 
-  const int w = 2, h=2, inch=4, outch=10,elemsize=4;
+  const int w = 2, h=2, inch=1, outch=1,elemsize=4;
 
   float* bot = new float[w*h*inch];
   fill_rand(bot, w*h*inch);
@@ -106,7 +106,7 @@ int main()
   timersub(&tvEndQpu, &tvStartQpu, &tvDiffQpu);
 
   // Display results
-  const int N = 20; // 192000
+  const int N = 1; // 192000
   for (int i = 0; i < N; i++)
       printf("top:%f topcpu:%f\n", top[i], topcpu[i]);
 

@@ -57,7 +57,23 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Print("top_ptr");
             Print("\n");
 
+            gather(bottom_ptr);
+            Print("gather:");
+            Print("bottom_ptr");
+            Print("\n");
+            gather(top_ptr);
+            Print("gather:");
+            Print("top_ptr");
+            Print("\n");
 
+            gather(bottom_ptr);
+            Print("gather:");
+            Print("bottom_ptr");
+            Print("\n");
+            gather(top_ptr);
+            Print("gather:");
+            Print("top_ptr");
+            Print("\n");
 
             Int last_i = -1;
 
@@ -103,6 +119,24 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Print("top_last");
             Print("\n");
 
+            receive(bottom_last);
+            Print("receive:");
+            Print("bottom_last");
+            Print("\n");
+            receive(top_last);
+            Print("receive:");
+            Print("top_last");
+            Print("\n");
+
+            receive(bottom_last);
+            Print("receive:");
+            Print("bottom_last");
+            Print("\n");
+            receive(top_last);
+            Print("receive:");
+            Print("top_last");
+            Print("\n");
+            
             //top_last = *top_ptr;
 
             /*

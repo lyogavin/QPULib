@@ -102,7 +102,7 @@ int main()
   gettimeofday(&tvStartQpu, NULL);
 
   printf("starting conv1x1s1_sgemm_qpu");
-  conv1x1s1_sgemm_qpu(bot, top, ker, bias, debug_output, 100, w, h, inch, outch, sizeof(float));
+  conv1x1s1_sgemm_qpu(bot, top, ker, bias, debug_output, 1000, w, h, inch, outch, sizeof(float));
 
   gettimeofday(&tvEndQpu, NULL);
   timersub(&tvEndQpu, &tvStartQpu, &tvDiffQpu);

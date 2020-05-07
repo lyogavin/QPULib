@@ -84,7 +84,8 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     Print(m);
                     Print("\n");
                     Print("top_last_by_one:");
-                    Print(*top_last_by_one);
+                    Float v = *top_last_by_one;
+                    Print(v);
                     Print("\n");
                     store(bottom_last_by_one * kernel_last + top_last_by_one, top_ptr_by_one);
                 End

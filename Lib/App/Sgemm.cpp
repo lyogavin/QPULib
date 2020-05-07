@@ -7,9 +7,10 @@
 #define output(f) _output(f);
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
-                            Ptr<Float> debug_output, Int debug_output_size,
+                            Ptr<Float> debug_output_buffer, Int debug_output_size,
                                    Int w, Int h, Int inch, Int outch, Int elemsize)
 {
+    Ptr<Float> debug_output = debug_output_buffer + index();
     Int output_offset = 0;
     // 1. multiple QPU...
     Int outch_inc = numQPUs();

@@ -3,8 +3,7 @@
 #include <cstring>
 
 
-#define _output(f) If (output_offset < debug_output_size) *(debug_output + output_offset) = f;End; output_offset = output_offset + 16;
-#define output(f) _output(f);
+#define output(f)  *(debug_output + output_offset) = f; output_offset = output_offset + 16;
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                             Ptr<Float> debug_output_buffer, Int debug_output_size,
@@ -104,6 +103,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             // gather the rest one by one
             receive(bottom_last);
+            bottom_last = *bottom_ptr;
             Print("receive:");
             Print("bottom_last");
             Print("\n");
@@ -111,14 +111,13 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             output(bottom_last);
 
             receive(top_last);
+            top_last = *top_ptr;
             Print("receive:");
             Print("top_last");
             Print("\n");
             output(top_last);
 
 
-            //top_last = *top_ptr;
-            //bottom_last = *bottom_ptr;
 
 
             Print("j:");

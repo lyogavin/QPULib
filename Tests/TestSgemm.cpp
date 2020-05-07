@@ -80,7 +80,7 @@ int main()
   float* topcpu = new float[w*h*outch];
   memcpy(topcpu, top, w*h*outch*4);
 
-  float* debug_output = new float[100];
+  float* debug_output = new float[1000];
 
   srand(time(0));
 

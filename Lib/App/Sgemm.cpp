@@ -59,7 +59,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(top_last);
 
             Print("top_last");
-            Print(toInt(top_last))
+            Print(toInt(top_last));
 
             If (last_i + 1 < w * h)
                 Int left_len = w * h - last_i - 1;

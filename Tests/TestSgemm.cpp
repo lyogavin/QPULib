@@ -4,6 +4,7 @@
 #include <cstdlib>
 
 #include <ctime>
+#include <math.h>
 using namespace std;
 
 
@@ -35,7 +36,7 @@ float get_diff(float* input, float* output, int size) {
     float diff = 0;
     for(int i = 0;i < size;i++) {
         float single_diff = output[i] - input[i];
-        if (single_diff > 0.0001f){
+        if (fabsf(single_diff) > 0.0001f){
             printf("diff pos: %d", i);
         }
         diff += single_diff;

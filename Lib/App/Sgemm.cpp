@@ -140,7 +140,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             top_last = *top_ptr;
             bottom_last = *bottom_ptr;
 
-            /*
+
             Print("j:");
             Print(j);
             Print("\n");
@@ -152,7 +152,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             Print("top_last");
             Print(toInt(top_last));
-            Print("\n");*/
+            Print("\n");
 
             If (last_i + 1 < w * h)
                 Int left_len = w * h - last_i - 1;
@@ -165,7 +165,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
 
                 If (j == 0)
-                    /*
+
                     Int to_store = toInt(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last);
 
                     Print("to_store");
@@ -179,7 +179,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     Print("all_one");
                     Print(toInt(all_one));
                     Print("\n");
-                    */
+
 
                     Print("store:");
                     Print("top_ptr");
@@ -189,16 +189,16 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     flush();
                     //store(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
 
-                    /*
+
                     Print("stored");
                     gather(top_ptr);
                     Float temp;
                     receive(temp);
                     Print(toInt(temp));
                     Print("\n");
-                    */
+                    
                 Else
-                    /*
+
                     Int to_store = toInt(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last);
 
                     Print("to_store");
@@ -212,7 +212,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     Print("all_one");
                     Print(toInt(all_one));
                     Print("\n");
-                    */
+
 
                     Print("store:");
                     Print("top_ptr");
@@ -223,14 +223,14 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     flush();
                     //store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
 
-                    /*
+
                     Print("stored");
                     gather(top_ptr);
                     Float temp;
                     receive(temp);
                     Print(toInt(temp));
                     Print("\n");
-                    */
+
 
                 End
             End

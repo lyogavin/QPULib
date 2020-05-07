@@ -14,9 +14,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
     Int inc = 16;//numQPUs() << 4;
 
-    Float bottom_last;
     Float kernel_last;
-    Float top_last;
     Float bias_last;
 
     For (Int k = me(), k < outch, k = k + outch_inc)
@@ -42,6 +40,8 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             Int last_i = -1;
 
+            Float bottom_last;
+            Float top_last;
 
             For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
                 last_i = i + inc - 1;

@@ -42,7 +42,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             Int last_i = -1;
 
-            /*
+
             For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
                 last_i = i + inc - 1;
                 //If (i + inc + inc - 1 < w * h)
@@ -59,7 +59,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 End
                 bottom_ptr = bottom_ptr + inc;
                 top_ptr = top_ptr + inc;
-            End*/
+            End
 
             // gather the rest one by one
             receive(bottom_last);
@@ -67,6 +67,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             //top_last = *top_ptr;
 
+            /*
             Print("j:");
             Print(j);
             Print("\n");
@@ -78,7 +79,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             Print("top_last");
             Print(toInt(top_last));
-            Print("\n");
+            Print("\n");*/
 
             If (last_i + 1 < w * h)
                 Int left_len = w * h - last_i - 1;

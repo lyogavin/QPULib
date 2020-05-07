@@ -66,7 +66,7 @@ int main()
   // Number of vertices and angle of rotation
   const float THETA = (float) 3.14159;
 
-  const int w = 2, h=2, inch=1, outch=2,elemsize=4;
+  const int w = 2, h=2, inch=1, outch=1,elemsize=4;
 
   float* bot = new float[w*h*inch];
   fill_rand(bot, w*h*inch);

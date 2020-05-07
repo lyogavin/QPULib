@@ -17,16 +17,23 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     Float kernel_last;
     Float bias_last;
 
+    Ptr<Float> kernel_ptr = kernel;// + (k * inch);
+
+    Ptr<Float> bias_ptr = bias;// + k;
+
+
+    Ptr<Float> top_ptr;
+
+    Ptr<Float> bottom_ptr;
+
     For (Int k = me(), k < outch, k = k + outch_inc)
-        Ptr<Float> kernel_ptr = kernel + (k * inch);
-        Ptr<Float> bias_ptr = bias + k;
         gather(bias_ptr);
         receive(bias_last);
         //bias_last = *bias_ptr;
 
         For (Int j = 0, j < inch, j = j + 1)
             Int offset = k* w* h;
-            Ptr<Float> top_ptr = top + index() + offset;
+            top_ptr = top + index() + offset;
 
             gather(kernel_ptr);
             receive(kernel_last);
@@ -34,7 +41,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             //Int i  = 0;
 
-            Ptr<Float> bottom_ptr = bottom + index() + (w * h * j);
+            bottom_ptr = bottom + index() + (w * h * j);
 
             Float bottom_last;
             //Ptr<Float> pbottom_last = &bottom_last;
@@ -166,6 +173,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             kernel_ptr = kernel_ptr + 1;
             //bias_ptr = bias_ptr + 1;
         End
+
+        //kernel_ptr = kernel_ptr + inch;
+        bias_ptr = bias_ptr + 1;
     End
 
     // Discard pre-fetched vectors from final iteration

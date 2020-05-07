@@ -10,7 +10,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
     Print("numQPUs:");
     Print(outch_inc);
-    Print("\n")
+    Print("\n");
 
     Int inc = 16;//numQPUs() << 4;
 

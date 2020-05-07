@@ -101,7 +101,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                     receive(stored);
 
                     Print("stored");
-                    Print(stored);
+                    Print(toInt(stored));
                     Print("\n");
 
                 End

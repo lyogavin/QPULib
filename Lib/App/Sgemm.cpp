@@ -112,6 +112,11 @@ void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* 
     memcpy_to_shared(&bottom_shar, bottom_blob, total * inch);
     printf("alloc top");
     SharedArray<float> top_shar(total * outch + padding);
+
+    for (int i =0; i<total * outch + padding; i++){
+        top_shar[i] = 0;
+    }
+
     //memcpy_to_shared(&top_shar, top_blob, total * outch);
     printf("alloc kernel");
     SharedArray<float> kernel_shar(inch * outch + padding);

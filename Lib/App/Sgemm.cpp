@@ -2,9 +2,15 @@
 
 #include <cstring>
 
+
+#define _output(f) if (output_offset < debug_output_size) debug_output[output_offset] = f
+#define output(f) _output(output_offset);_output(f)
+
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
+                            Ptr<Float> debug_output, Int debug_output_size,
                                    Int w, Int h, Int inch, Int outch, Int elemsize)
 {
+    Int output_offset = 0;
     // 1. multiple QPU...
     Int outch_inc = numQPUs();
 
@@ -57,23 +63,6 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Print("top_ptr");
             Print("\n");
 
-            gather(bottom_ptr);
-            Print("gather:");
-            Print("bottom_ptr");
-            Print("\n");
-            gather(top_ptr);
-            Print("gather:");
-            Print("top_ptr");
-            Print("\n");
-
-            gather(bottom_ptr);
-            Print("gather:");
-            Print("bottom_ptr");
-            Print("\n");
-            gather(top_ptr);
-            Print("gather:");
-            Print("top_ptr");
-            Print("\n");
 
             Int last_i = -1;
 
@@ -95,10 +84,13 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Print("receive inside :");
                 Print("bottom_last + inc");
                 Print("\n");
+                output(bottom_last);
+
                 receive(top_last);
                 Print("receive inside :");
                 Print("top_last + inc");
                 Print("\n");
+                output(top_last);
 
                 If (j == 0)
                     store(bottom_last * kernel_last + bias_last, top_ptr);
@@ -114,10 +106,14 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Print("receive:");
             Print("bottom_last");
             Print("\n");
+
+            output(bottom_last);
+
             receive(top_last);
             Print("receive:");
             Print("top_last");
             Print("\n");
+            output(top_last);
 
             receive(bottom_last);
             Print("receive:");
@@ -273,7 +269,9 @@ void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned size)
     }
 }
 
-void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, float* bias, int w, int h, int inch, int outch, int elemsize)
+void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, float* bias,
+    float* debug_output, int debug_output_size,
+    int w, int h, int inch, int outch, int elemsize)
 {
     int padding = 16;
     int total = w * h;
@@ -297,14 +295,18 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     SharedArray<float> bias_shar(outch + padding);
     memcpy_to_shared(&bias_shar, bias, outch);
 
+    SharedArray<float> debug_output_shar(debug_output_size);
+
     // Compile kernel
     auto k = compile(conv1x1s1_sgemm_qpulib);
 
     // Invoke kernel
     k.setNumQPUs(NQPUS);
 
-    k(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, w, h, inch, outch, elemsize);
+    k(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, inch, outch, elemsize);
 
     memcpy_from_shared(top_blob, &top_shar, total*outch);
+
+    memcpy_from_shared(debug_output, &debug_output_shar, debug_output_size);
 
 }

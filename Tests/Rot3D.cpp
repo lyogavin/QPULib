@@ -67,7 +67,7 @@ void rot3D_3(Int n, Float cosTheta, Float sinTheta, Ptr<Float> x, Ptr<Float> y)
   gather(p); gather(q);
  
   Float xOld, yOld;
-  For (Int j = 0, i < 1, j = j+1)
+  For (Int j = 0, j < 1, j = j+1)
       For (Int i = 0, i < n, i = i+inc)
         gather(p+inc); gather(q+inc);
         receive(xOld); receive(yOld);

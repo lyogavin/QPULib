@@ -86,7 +86,16 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
 
                 If (j == 0)
+                    Int to_store = all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last;
+
+                    Print("to_store");
+                    Print(to_store);
+                    Print("\n");
+
                     store(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
+                    Print("stored");
+                    Print(toInt(*top_ptr));
+                    Print("\n");
                 Else
                     Int to_store = toInt(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last);
 

@@ -116,7 +116,7 @@ void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned size)
 
 void conv1x1s1_sgemm_qpu(void* bottom_blob, void* top_blob, void* kernel, void* bias, int w, int h, int inch, int outch, int elemsize)
 {
-    int padding = 0;
+    int padding = 16;
     int total = w * h;
     int NQPUS = 1;
     // 1. copy data to shared memeory...

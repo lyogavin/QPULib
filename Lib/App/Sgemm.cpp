@@ -96,7 +96,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 store(sum, top_ptr);
             End
 
-            top_ptr = top_ptr + i;
+            top_ptr = top_ptr + inc;
         End
 
         {

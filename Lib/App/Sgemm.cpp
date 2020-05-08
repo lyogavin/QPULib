@@ -219,6 +219,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     //receive(top_last);
 }
 
+static auto compiled_sgemm_kernel = compile(conv1x1s1_sgemm_qpulib);
+
+
 
 void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned size)
 {
@@ -264,7 +267,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     SharedArray<float> debug_output_shar(debug_output_size);
 
     // Compile kernel
-    auto k = compile(conv1x1s1_sgemm_qpulib);
+    auto k = compiled_sgemm_kernel;
 
     // Invoke kernel
     k.setNumQPUs(NQPUS);

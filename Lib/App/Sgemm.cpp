@@ -36,7 +36,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     receive(kernel_vec);
 
     Print("kernel_vec");
-    Print(kernel_vec);
+    Print(toInt(kernel_vec*10000));
     Print("\n");
 
 

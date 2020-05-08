@@ -97,7 +97,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             If (i + inc - 1 >= (w * h))
                 Int exceeding_len = i + inc - (w * h);
-                Float old_top = *top_ptr;
+                Float old_top = 0;//*top_ptr;
 
                 Float to_store = 0;
                 Where(index() < 16 - exceeding_len)

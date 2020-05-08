@@ -79,7 +79,7 @@ int main()
   fill_rand(bias, outch);
 
   float* topcpu = new float[w*h*outch];
-  memcpy(topcpu, top, w*h*outch*4);
+  memcpy(topcpu, top, w*h*outch*sizeof(float));
 
   float* debug_output = new float[1000];
 

@@ -33,7 +33,8 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
     Ptr<Float> bottom_ptr;
 
-    For (Int k = me(), k < outch, k = k + 1) //outch_inc)
+    //For (Int k = me(), k < outch, k = k + outch_inc)
+    For (Int k = 0, k < outch, k = k + 1)
         gather(bias_ptr);
         receive(bias_last);
 

@@ -40,7 +40,8 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
         top_ptr = top + index() + offset;
 
 
-        For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
+        //For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
+        For (Int i = 0, i < (w * h), i = i + inc)
             Float sum = bias_last;
 
             Print("sum:");
@@ -78,7 +79,22 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Print(toInt(sum));
             Print("\n");
 
-            store(sum, top_ptr);
+            If (i + inc - 1 >= (w * h))
+                Int exceeding_len = i + inc - (w * h);
+                Float old_top = *top_ptr;
+
+                Float to_store = 0;
+                Where(index() < 16 - exceeding_len)
+                    to_store = sum;
+                End
+                Where(index() >= 16 - exceeding_len)
+                    to_store = old_top;
+                End
+
+                store(to_store, top_ptr);
+            Else
+                store(sum, top_ptr);
+            End
 
             top_ptr = top_ptr + 1;
         End

@@ -28,9 +28,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
     Ptr<Float> bias_ptr = bias;// + k;
 
-    Print("k*inch");
-    Print(k*inch);
-    Print("\n");
+
 
 
     Ptr<Float> top_ptr;
@@ -38,6 +36,10 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     Ptr<Float> bottom_ptr;
 
     For (Int k = me(), k < outch, k = k + outch_inc)
+        Print("k*inch");
+        Print(k*inch);
+        Print("\n");
+
         gather(bias_ptr);
         receive(bias_last);
 

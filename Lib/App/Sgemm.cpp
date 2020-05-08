@@ -14,6 +14,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     // 1. multiple QPU...
     Int outch_inc = numQPUs();
 
+
     Print("numQPUs:");
     Print(outch_inc);
     Print("\n");
@@ -24,20 +25,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     Float bias_last;
     Float bottom_last;
 
-    //Ptr<Float> kernel_ptr = kernel;// + (k * inch);
+    Ptr<Float> kernel_ptr = kernel;// + (k * inch);
 
     Ptr<Float> bias_ptr = bias;// + k;
 
 
-    Ptr<Float> kernel_vec_ptr = kernel + index();
-    Float kernel_vec;
-
-    gather(kernel_vec_ptr);
-    receive(kernel_vec);
-
-    Print("kernel_vec");
-    Print(toInt(kernel_vec*10000));
-    Print("\n");
 
 
 
@@ -83,7 +75,13 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 gather(bottom_ptr + w*h);
 
                 receive(kernel_last);
-                kernel_last = *kernel_ptr;
+
+                for (int i =0;i<16;i++) {
+                    Where(index() == 0)
+                        kernel_base = kernel_base * kernel_last
+                    End
+                }
+
 
                 receive(bottom_last);
 
@@ -104,7 +102,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Print(toInt(sum * 10000));
                 Print("\n");
 
-                kernel = kernel + 1;
+                kernel_ptr = kernel_ptr + inc;
                 bottom_ptr = bottom_ptr + w*h;
             End
             receive(kernel_last);
@@ -244,7 +242,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
         bias_ptr = bias_ptr + 1;
         */
         }
-        bias_ptr = bias_ptr + 1;
+        bias_ptr = bias_ptr + inc;
     End
 
     flush();
@@ -268,6 +266,17 @@ void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned size)
     printf("\n");
 }
 
+
+void memcpy_to_shared_expand(SharedArray<float>* dest, float* src, unsigned size)
+{
+    for (int i =0; i<size; i++){
+        printf("%f\t", src[i]);
+        for (int j=i*16;j<i*16+16;j++){
+            (*dest)[j] = src[i];
+        }
+    }
+    printf("\n");
+}
 
 void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned size)
 {

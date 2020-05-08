@@ -28,6 +28,10 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
     Ptr<Float> bias_ptr = bias;// + k;
 
+    Print("k*inch");
+    Print(k*inch);
+    Print("\n");
+
 
     Ptr<Float> top_ptr;
 

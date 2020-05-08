@@ -234,7 +234,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
         bias_ptr = bias_ptr + 1;
         */
         }
-        bias_ptr = bias_ptr + inc;
+        bias_ptr = bias_ptr + 1;
     End
 
     flush();

@@ -73,6 +73,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Print(toInt(kernel_last * 10000));
                 Print("\n");
 
+
+                Print("bottom_last using:");
+                Print(toInt(bottom_last * 10000));
+                Print("\n");
+
                 sum = sum + kernel_last * bottom_last;
 
 

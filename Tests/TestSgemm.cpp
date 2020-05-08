@@ -48,6 +48,13 @@ float get_diff(float* input, float* output, int size) {
 
     return diff;
 }
+void print_array(float* array, int size)
+{
+    for (int i =0; i< size; i++) {
+        printf("%f\t", array[i]);
+    }
+    printf("\n");
+}
 
 void fill_rand(float* dest, int size)
 {
@@ -55,7 +62,9 @@ void fill_rand(float* dest, int size)
     {
         dest[i] = rand()/float(RAND_MAX);
     }
+    print_array(dest, size);
 }
+
 
 int main()
 {
@@ -70,12 +79,16 @@ int main()
   //const int w = 150, h=150, inch=16, outch=96,elemsize=4;
 
   float* bot = new float[w*h*inch];
+  printf("bot:\n");
   fill_rand(bot, w*h*inch);
   float* top = new float[w*h*outch];
+  printf("top:\n");
   fill_rand(top, w*h*outch);
   float* ker = new float[outch*inch];
+  printf("ker:\n");
   fill_rand(ker, outch*inch);
   float* bias = new float[outch];
+  printf("bias:\n");
   fill_rand(bias, outch);
 
   float* topcpu = new float[w*h*outch];

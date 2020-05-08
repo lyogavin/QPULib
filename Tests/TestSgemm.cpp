@@ -62,7 +62,7 @@ void fill_rand(float* dest, int size)
     {
         dest[i] = rand()/float(RAND_MAX);
     }
-    print_array(dest, size);
+    //print_array(dest, size);
 }
 
 

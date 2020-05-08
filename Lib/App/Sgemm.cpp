@@ -4,7 +4,11 @@
 #include <ctime>
 
 
+
 #define output(f)  *(debug_output) = f; debug_output = debug_output + 16;
+
+
+#define DEBUG false
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                             Ptr<Float> debug_output_buffer, Int debug_output_size,
@@ -253,21 +257,30 @@ void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned size)
 {
     for (int i =0; i<size; i++){
         (*dest)[i] = src[i];
+#ifdef DEBUG
         printf("%f\t", src[i]);
+#endif
     }
+#ifdef DEBUG
     printf("\n");
+#endif
+
 }
 
 
 void memcpy_to_shared_expand(SharedArray<float>* dest, float* src, unsigned size)
 {
     for (int i =0; i<size; i++){
+#ifdef DEBUG
         printf("%f\t", src[i]);
+#endif
         for (int j=i*16;j<i*16+16;j++){
             (*dest)[j] = src[i];
         }
     }
+#ifdef DEBUG
     printf("\n");
+#endif
 }
 
 void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned size)
@@ -291,10 +304,14 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     gettimeofday(&tvStart, NULL);
 
     // 1. copy data to shared memeory...
+#ifdef DEBUG
     printf("alloc bottom");
+#endif
     SharedArray<float> bottom_shar(total * inch + padding);
     memcpy_to_shared(&bottom_shar, bottom_blob, total * inch);
+#ifdef DEBUG
     printf("alloc top");
+#endif
     SharedArray<float> top_shar(total * outch + padding);
 
     for (int i =0; i<total * outch + padding; i++){
@@ -302,10 +319,14 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     }
 
     //memcpy_to_shared(&top_shar, top_blob, total * outch);
+#ifdef DEBUG
     printf("alloc kernel");
+#endif
     SharedArray<float> kernel_shar(inch * outch + padding);
     memcpy_to_shared(&kernel_shar, kernel, inch * outch);
+#ifdef DEBUG
     printf("alloc bias");
+#endif
     SharedArray<float> bias_shar(outch + padding);
     memcpy_to_shared(&bias_shar, bias, outch);
 

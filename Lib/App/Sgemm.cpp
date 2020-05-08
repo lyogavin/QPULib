@@ -1,6 +1,7 @@
 #include "App/Sgemm.h"
 
 #include <cstring>
+#include <ctime>
 
 
 #define output(f)  *(debug_output) = f; debug_output = debug_output + 16;
@@ -245,6 +246,12 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     int padding = 16;
     int total = w * h;
     int NQPUS = 1;
+
+    // Timestamps
+    timeval tvStart, tvEnd, tvDiff;
+
+    gettimeofday(&tvStart, NULL);
+
     // 1. copy data to shared memeory...
     printf("alloc bottom");
     SharedArray<float> bottom_shar(total * inch + padding);
@@ -265,6 +272,10 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     memcpy_to_shared(&bias_shar, bias, outch);
 
     SharedArray<float> debug_output_shar(debug_output_size);
+
+    gettimeofday(&tvEnd, NULL);
+    timersub(&tvEnd, &tvStart, &tvDiff);
+    printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
     // Compile kernel
     auto k = compiled_sgemm_kernel;

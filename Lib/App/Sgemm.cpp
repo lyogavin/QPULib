@@ -67,6 +67,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 receive(kernel_last);
                 receive(bottom_last);
 
+
+                Print("kernel using:");
+                Print(toInt(kernel_last * 10000));
+                Print("\n");
+
                 sum = sum + kernel_last * bottom_last;
 
 

@@ -55,6 +55,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             bottom_ptr = bottom + index() + i;
 
+            kernel_ptr = kernel + (k * inch);
 
             gather(kernel_ptr);
             gather(bottom_ptr);

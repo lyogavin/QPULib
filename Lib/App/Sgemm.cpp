@@ -50,7 +50,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Float sum = bias_last;
 
             Print("sum:");
-            Print(toInt(sum * 100.0f));
+            Print(toInt(sum * 10000.0f));
             Print("\n");
 
             bottom_ptr = bottom + index() + i;
@@ -71,7 +71,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
 
                 Print("sum:");
-                Print(toInt(sum * 100));
+                Print(toInt(sum * 10000));
                 Print("\n");
 
                 kernel = kernel + 1;
@@ -81,7 +81,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(bottom_last);
 
             Print("sum to store:");
-            Print(toInt(sum * 100));
+            Print(toInt(sum * 10000));
             Print("\n");
 
             If (i + inc - 1 >= (w * h))

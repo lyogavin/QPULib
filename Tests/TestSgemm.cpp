@@ -122,7 +122,7 @@ int main()
   timersub(&tvEndQpu, &tvStartQpu, &tvDiffQpu);
 
   // Display results
-  const int N = 1; // 192000
+  const int N = 20; // 192000
   for (int i = 0; i < N; i++)
       printf("top:%f topcpu:%f\n", top[i], topcpu[i]);
 

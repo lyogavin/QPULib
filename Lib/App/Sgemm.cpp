@@ -296,7 +296,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 {
     int padding = 16;
     int total = w * h;
-    int NQPUS = 1;
+    int NQPUS = 12;
 
     // Timestamps
     timeval tvStart, tvEnd, tvDiff;

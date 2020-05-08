@@ -75,14 +75,6 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 gather(bottom_ptr + w*h);
 
                 receive(kernel_last);
-
-                for (int i =0;i<16;i++) {
-                    Where(index() == 0)
-                        kernel_base = kernel_base * kernel_last
-                    End
-                }
-
-
                 receive(bottom_last);
 
 

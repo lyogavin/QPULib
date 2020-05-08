@@ -8,7 +8,7 @@
 #define output(f)  *(debug_output) = f; debug_output = debug_output + 16;
 
 
-#define DEBUG false
+//#define DEBUG 
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                             Ptr<Float> debug_output_buffer, Int debug_output_size,

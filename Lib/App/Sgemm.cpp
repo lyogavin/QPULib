@@ -43,7 +43,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     Ptr<Float> bottom_ptr;
 
     For (Int k = me(), k < outch, k = k + outch_inc)
-        If k == 1:
+        If (k == 1)
             Print("k*inch");
             Print(k*inch);
             Print("\n");
@@ -52,7 +52,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
         gather(bias_ptr);
         receive(bias_last);
 
-        If k == 1:
+        If (k == 1)
             Print("received bias:");
             Print(toInt(bias_last * 10000.0f));
             Print("\n");
@@ -64,7 +64,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
         //For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
         For (Int i = 0, i < (w * h), i = i + inc)
             Float sum = bias_last;
-            If k == 1:
+            If (k == 1)
                 Print("sum:");
                 Print(toInt(sum * 10000.0f));
                 Print("\n");
@@ -86,7 +86,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 receive(bottom_last);
 
 
-                If k == 1:
+                If (k == 1)
                     Print("kernel using:");
                     Print(toInt(kernel_last * 10000));
                     Print("\n");
@@ -99,7 +99,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 sum = sum + kernel_last * bottom_last;
 
 
-                If k == 1:
+                If (k == 1)
                     Print("sum:");
                     Print(toInt(sum * 10000));
                     Print("\n");
@@ -111,7 +111,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             receive(kernel_last);
             receive(bottom_last);
 
-            If k == 1:
+            If (k == 1)
                 Print("sum to store:");
                 Print(toInt(sum * 10000));
                 Print("\n");

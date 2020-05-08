@@ -29,6 +29,17 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     Ptr<Float> bias_ptr = bias;// + k;
 
 
+    Ptr<Float> kernel_vec_ptr = kernel + index();
+    Float kernel_vec;
+
+    gather(kernel_vec_ptr);
+    receive(kernel_vec);
+
+    Print("kernel_vec");
+    Print(kernel_vec);
+    Print("\n");
+
+
 
 
     Ptr<Float> top_ptr;

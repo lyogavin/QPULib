@@ -228,7 +228,9 @@ void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned size)
 {
     for (int i =0; i<size; i++){
         (*dest)[i] = src[i];
+        printf("%f\t", src[i]);
     }
+    print("\n");
 }
 
 

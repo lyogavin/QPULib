@@ -34,24 +34,57 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     For (Int k = me(), k < outch, k = k + outch_inc)
         gather(bias_ptr);
         receive(bias_last);
-        //bias_last = *bias_ptr;
 
+        Int offset = k* w* h;
+        top_ptr = top + index() + offset;
+
+
+        For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
+            Float sum = bias_last;
+
+            bottom_ptr = bottom + index() + i;
+
+
+            gather(kernel_ptr);
+            gather(bottom_ptr);
+
+            For (Int j = 0, j < inch, j = j + 1)
+
+                gather(kernel_ptr + 1);
+                gather(bottom_ptr + w*h);
+
+                receive(kernel_last);
+                receive(bottom_last);
+
+                sum = sum + kernel_last * bottom_last;
+
+
+
+                kernel = kernel + 1;
+                bottom_ptr = bottom_ptr + w*h;
+            End
+            receive(kernel_last);
+            receive(bottom_last);
+
+
+            store(sum, top_ptr);
+
+            top_ptr = top_ptr + 1;
+        End
+
+        {
+        /*
         For (Int j = 0, j < inch, j = j + 1)
             Int offset = k* w* h;
             top_ptr = top + index() + offset;
 
             gather(kernel_ptr);
             receive(kernel_last);
-            //kernel_last = *kernel_ptr;
-
-            //Int i  = 0;
 
             bottom_ptr = bottom + index() + (w * h * j);
 
             Float bottom_last;
-            //Ptr<Float> pbottom_last = &bottom_last;
             Float top_last;
-            //Ptr<Float> ptop_last = &top_last;
 
             gather(bottom_ptr);
             Print("gather:");
@@ -109,28 +142,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
             output(bottom_last);
 
+            // read after write doesn't work
             receive(top_last);
             top_last = *top_ptr;
-            Print("receive:");
-            Print(toInt(top_last));
-            Print("\n");
-            output(top_last);
-
-
-
-
-            Print("j:");
-            Print(j);
-            Print("\n");
-
-            Print("last_i+1:");
-            Print(last_i+1);
-            Print("\n");
-
-
-            Print("top_last");
-            Print(toInt(top_last));
-            Print("\n");
 
             If (last_i + 1 < w * h)
                 Int left_len = w * h - last_i - 1;
@@ -146,78 +160,17 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
                     Int to_store = toInt(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last);
 
-                    Print("to_store");
-                    Print(to_store);
-                    Print("\n");
-
-                    Print("kernel_last:");
-                    Print(toInt(kernel_last));
-                    Print(",");
-
-                    Print("bias_last:");
-                    Print(toInt(bias_last));
-                    Print(",");
-
-                    Print("all zero:");
-                    Print(toInt(all_zero));
-                    Print(",");
-
-                    Print("all_one");
-                    Print(toInt(all_one));
-                    Print("\n");
-
-
-                    Print("store:");
-                    Print("top_ptr");
-                    Print("\n");
                     //store(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
                     *top_ptr = all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last;
-                    //flush();
-                    //store(all_zero * (bottom_last * kernel_last + bias_last) + (all_one - all_zero) * top_last, top_ptr);
 
 
-                    Print("stored");
-                    gather(top_ptr);
-                    Float temp;
-                    receive(temp);
-                    Print(toInt(temp));
-                    Print("\n");
 
                 Else
 
                     Int to_store = toInt(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last);
 
-                    Print("to_store");
-                    Print(to_store);
-                    Print("\n");
-
-                    Print("all zero:");
-                    Print(toInt(all_zero));
-                    Print(",");
-
-                    Print("all_one");
-                    Print(toInt(all_one));
-                    Print("\n");
-
-
-                    Print("store:");
-                    Print("top_ptr");
-                    Print("\n");
-                    //store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
                     //store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
                     *top_ptr = all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last;
-                    //flush();
-                    //store(all_zero * (bottom_last * kernel_last + top_last) + (all_one - all_zero) * top_last, top_ptr);
-
-
-                    Print("stored");
-                    gather(top_ptr);
-                    Float temp;
-                    receive(temp);
-                    Print(toInt(temp));
-                    Print("\n");
-
-
                 End
             End
 
@@ -227,7 +180,11 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
         //kernel_ptr = kernel_ptr + inch;
         bias_ptr = bias_ptr + 1;
+        */
+        }
     End
+
+    flush();
 
     // Discard pre-fetched vectors from final iteration
     //receive(kernel_last);

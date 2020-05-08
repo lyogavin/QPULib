@@ -98,7 +98,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Print(toInt(sum * 10000));
                 Print("\n");
 
-                kernel_ptr = kernel_ptr + inc;
+                kernel_ptr = kernel_ptr + 1;
                 bottom_ptr = bottom_ptr + w*h;
             End
             receive(kernel_last);

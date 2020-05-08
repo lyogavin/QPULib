@@ -37,6 +37,10 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
         gather(bias_ptr);
         receive(bias_last);
 
+        Print("received bias:");
+        Print(toInt(bias_last * 100.0f));
+        Print("\n");
+
         Int offset = k* w* h;
         top_ptr = top + index() + offset;
 

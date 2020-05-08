@@ -46,7 +46,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Float sum = bias_last;
 
             Print("sum:");
-            Print(toInt(sum * 100));
+            Print(toInt(sum * 100.0f));
             Print("\n");
 
             bottom_ptr = bottom + index() + i;

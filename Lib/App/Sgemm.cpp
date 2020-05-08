@@ -60,6 +60,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
         Int offset = k* w* h;
         top_ptr = top + index() + offset;
+        bias_ptr = bias + k;
 
         //For (Int i = 0, i + inc - 1 < (w * h), i = i + inc)
         For (Int i = 0, i < (w * h), i = i + inc)
@@ -247,7 +248,6 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
         bias_ptr = bias_ptr + 1;
         */
         }
-        bias_ptr = bias_ptr + 1;
     End
 
     flush();

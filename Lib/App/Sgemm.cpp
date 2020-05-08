@@ -21,6 +21,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
     Float kernel_last;
     Float bias_last;
+    Float bottom_last;
 
     Ptr<Float> kernel_ptr = kernel;// + (k * inch);
 

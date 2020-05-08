@@ -34,6 +34,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <stdint.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
+#include <errno.h>
 
 #include "Mailbox.h"
 
@@ -71,7 +72,8 @@ void unmapmem(void *addr, unsigned size)
 {
    int s = munmap(addr, size);
    if (s != 0) {
-      printf("munmap error %d\n", s);
+      int errsv = errno;
+      printf("munmap error %d, errno: %d\n", s, errsv);
       exit (-1);
    }
 }

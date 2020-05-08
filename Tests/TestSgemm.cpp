@@ -5,6 +5,8 @@
 
 #include <ctime>
 #include <math.h>
+#include <errno.h>
+
 using namespace std;
 
 

@@ -47,7 +47,7 @@ class Heap
     {
       unsigned long nbytes = sizeof(T) * n;
       if (size + nbytes >= capacity) {
-        printf("QPULib error: heap '%s' is full.\n", heapName);
+        printf("QPULib error: heap '%s' is full. %d+%d/%d\n", heapName, size, nbytes, capacity );
         exit(-1);
         return (T*) NULL;
       }

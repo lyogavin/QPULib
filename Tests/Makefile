@@ -3,7 +3,7 @@ ROOT = ../Lib
 
 # Compiler and default flags
 CXX = g++
-CXX_FLAGS = -fpermissive -Wconversion -std=c++0x -I $(ROOT) -fsanitize=address
+CXX_FLAGS = -fpermissive -Wconversion -std=c++0x -I $(ROOT) #-fsanitize=address
 LDFLAGS += -fsanitize=address
 # Object directory
 OBJ_DIR = obj

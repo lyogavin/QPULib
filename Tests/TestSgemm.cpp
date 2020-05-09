@@ -134,7 +134,7 @@ int main()
       printf("%d - offset: %d, value: %f\n", i, int(debug_output[2*i]), debug_output[2*i+1]);
   */
 
-  float diff = 0;//get_diff(top, topcpu, w*h*outch);
+  float diff = get_diff(top, topcpu, w*h*outch);
  
   printf("QPU: diff: %f, %ld.%06lds\n", diff, tvDiffQpu.tv_sec, tvDiffQpu.tv_usec);
 

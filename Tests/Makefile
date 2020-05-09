@@ -86,6 +86,7 @@ install: libQPULib.a
 	install -m 644 ../Lib/Source/*.h $(DESTDIR)$(PREFIX)/include/Source/
 	install -m 644 ../Lib/Common/*.h $(DESTDIR)$(PREFIX)/include/Common/
 	install -m 644 ../Lib/Target/*.h $(DESTDIR)$(PREFIX)/include/Target/
+	install -m 644 ../Lib/App/*.h $(DESTDIR)$(PREFIX)/include/App/
 	install -m 644 ../Lib/VideoCore/*.h $(DESTDIR)$(PREFIX)/include/VideoCore/
 
 

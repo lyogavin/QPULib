@@ -79,17 +79,13 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             gather(bottom_ptr);
 
 
-            //test
-            receive(kernel_last);
-
-
 
             For (Int j = 0, j < inch, j = j + 1)
 
-                //gather(kernel_ptr + 1); // test
+                gather(kernel_ptr + 1);
                 gather(bottom_ptr + w*h);
 
-                //receive(kernel_last); //test
+                receive(kernel_last);
                 receive(bottom_last);
 
 
@@ -115,7 +111,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 kernel_ptr = kernel_ptr + 1;
                 bottom_ptr = bottom_ptr + w*h;
             End
-            //receive(kernel_last); // test
+            receive(kernel_last);
             receive(bottom_last);
 
             If (k == 1)

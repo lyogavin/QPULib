@@ -260,6 +260,12 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     //receive(top_last);
 }
 
+
+/*auto get_qpu_sgemm_kernel()
+{
+    return compile(conv1x1s1_sgemm_qpulib);
+}*/
+
 static auto compiled_sgemm_kernel = compile(conv1x1s1_sgemm_qpulib);
 
 

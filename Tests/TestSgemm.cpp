@@ -74,6 +74,8 @@ int main()
   timeval tvStart, tvEnd, tvDiff;
   timeval tvStartQpu, tvEndQpu, tvDiffQpu;
 
+  //conv1x1s1_sgemm_qpu = get_qpu_sgemm_kernel();
+
   // Number of vertices and angle of rotation
   const float THETA = (float) 3.14159;
 

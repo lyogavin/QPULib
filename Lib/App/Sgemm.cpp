@@ -266,7 +266,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     return compile(conv1x1s1_sgemm_qpulib);
 }*/
 
-static SgemmKernel compiled_sgemm_kernel = null;
+static SgemmKernel compiled_sgemm_kernel = NULL;
 
 void init_qpulib_sgemm()
 {

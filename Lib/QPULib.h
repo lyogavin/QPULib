@@ -6,8 +6,8 @@
 #include "Source/Ptr.h"
 #include "Source/Cond.h"
 #include "Source/Stmt.h"
-#include "App/Sgemm.h"
 
 #include "Kernel.h"
+#include "App/Sgemm.h"
 
 #endif

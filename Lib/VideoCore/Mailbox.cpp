@@ -61,7 +61,8 @@ void *mapmem(unsigned base, unsigned size)
    printf("base=0x%x, mem=%p\n", base, mem);
 #endif
    if (mem == MAP_FAILED) {
-      printf("mmap error %p\n", mem);
+      int errsv = errno;
+      printf("mmap error %p, errno: %d\n", mem, errsv);
       exit (-1);
    }
    close(mem_fd);

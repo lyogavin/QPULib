@@ -266,7 +266,12 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     return compile(conv1x1s1_sgemm_qpulib);
 }*/
 
-static auto compiled_sgemm_kernel = compile(conv1x1s1_sgemm_qpulib);
+static SgemmKernel compiled_sgemm_kernel = null;
+
+void init_qpulib_sgemm()
+{
+    compiled_sgemm_kernel = compile(conv1x1s1_sgemm_qpulib);
+}
 
 
 

@@ -57,6 +57,7 @@ void *mapmem(unsigned base, unsigned size)
       MAP_SHARED/*|MAP_FIXED*/,
       mem_fd,
       base);
+   printf("base=0x%x, mem=%p, size=%d, mem_fd=%d\n", base, mem, size, mem_fd);
 #ifdef DEBUG
    printf("base=0x%x, mem=%p\n", base, mem);
 #endif

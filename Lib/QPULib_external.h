@@ -1,7 +1,6 @@
 #ifndef _QPULIB_EXT_H_
 #define _QPULIB_EXT_H_
 
-typedef Kernel<Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Int, Int, Int, Int, Int, Int> SgemmKernel;
 
 void init_qpulib_sgemm();
 

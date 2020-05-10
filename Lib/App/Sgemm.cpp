@@ -266,11 +266,12 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
     return compile(conv1x1s1_sgemm_qpulib);
 }*/
 
-static SgemmKernel compiled_sgemm_kernel = NULL;
+static SgemmKernel* compiled_sgemm_kernel = NULL;
 
 void init_qpulib_sgemm()
 {
-    compiled_sgemm_kernel = compile(conv1x1s1_sgemm_qpulib);
+    static SgemmKernel instance = compile(conv1x1s1_sgemm_qpulib);
+    *compiled_sgemm_kernel = &instance;
 }
 
 
@@ -359,7 +360,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
     // Compile kernel
-    auto k = compiled_sgemm_kernel;
+    auto k = *compiled_sgemm_kernel;
 
     // Invoke kernel
     k.setNumQPUs(NQPUS);

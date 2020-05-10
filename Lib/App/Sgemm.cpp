@@ -271,7 +271,7 @@ static SgemmKernel* compiled_sgemm_kernel = NULL;
 void init_qpulib_sgemm()
 {
     static SgemmKernel instance = compile(conv1x1s1_sgemm_qpulib);
-    *compiled_sgemm_kernel = &instance;
+    compiled_sgemm_kernel = &instance;
 }
 
 

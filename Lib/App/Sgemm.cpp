@@ -14,7 +14,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                             Ptr<Float> debug_output_buffer, Int debug_output_size,
                                    Int w, Int h, Int inch, Int outch, Int elemsize)
 {
-    Ptr<Float> debug_output = debug_output_buffer + index();
+    //Ptr<Float> debug_output = debug_output_buffer + index();
     // 1. multiple QPU...
     Int outch_inc = numQPUs();
 
@@ -353,7 +353,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     SharedArray<float> bias_shar(outch + padding);
     memcpy_to_shared(&bias_shar, bias, outch);
 
-    SharedArray<float> debug_output_shar(debug_output_size);
+    if (debug_output_size > 0)
+        SharedArray<float> debug_output_shar(debug_output_size);
 
     gettimeofday(&tvEnd, NULL);
     timersub(&tvEnd, &tvStart, &tvDiff);
@@ -369,6 +370,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     memcpy_from_shared(top_blob, &top_shar, total*outch);
 
-    memcpy_from_shared(debug_output, &debug_output_shar, debug_output_size);
+    if (debug_output_size > 0)
+        memcpy_from_shared(debug_output, &debug_output_shar, debug_output_size);
 
 }

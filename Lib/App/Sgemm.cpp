@@ -353,8 +353,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     SharedArray<float> bias_shar(outch + padding);
     memcpy_to_shared(&bias_shar, bias, outch);
 
-    if (debug_output_size > 0)
-        SharedArray<float> debug_output_shar(debug_output_size);
+    SharedArray<float> debug_output_shar(debug_output_size > 0? debug_output_size: 10 );
 
     gettimeofday(&tvEnd, NULL);
     timersub(&tvEnd, &tvStart, &tvDiff);

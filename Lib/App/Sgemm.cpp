@@ -362,12 +362,12 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
     // Compile kernel
-    SgemmKernel k = *compiled_sgemm_kernel;
+    SgemmKernel* k = compiled_sgemm_kernel;
 
     // Invoke kernel
-    k.setNumQPUs(NQPUS);
+    k->setNumQPUs(NQPUS);
 
-    k(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, inch, outch, elemsize);
+    (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, inch, outch, elemsize);
 
     memcpy_from_shared(top_blob, &top_shar, total*outch);
 

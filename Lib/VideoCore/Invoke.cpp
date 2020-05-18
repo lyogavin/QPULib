@@ -19,6 +19,7 @@ void invoke(
   int numWords = qpuCodeMemOffset + (params->numElems+2)*numQPUs + 2*numQPUs;
 
   printf("qpuCodeMemOffset: %d, numElems: %d, numQPUs: %d codeMem.size: %d\n", qpuCodeMemOffset, params->numElems, numQPUs, codeMem.size);
+  printf("codeMem.getPointer(): 0x%.8X, codeMem: 0x%.8X, \n", codeMem.getPointer(), &codeMem);
   assert(numWords < codeMem.size);
 
   // Pointer to start of code

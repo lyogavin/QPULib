@@ -362,7 +362,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
     // Compile kernel
-    auto k = *compiled_sgemm_kernel;
+    SgemmKernel k = *compiled_sgemm_kernel;
 
     // Invoke kernel
     k.setNumQPUs(NQPUS);

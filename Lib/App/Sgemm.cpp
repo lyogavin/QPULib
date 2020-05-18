@@ -128,9 +128,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 // check if address trying to read overlap with last store, if so, need a flush
 
                 If (last_top_ptr_offset - top_ptr_offset < 16 && top_ptr_offset - last_top_ptr_offset < 16)
-                    flush()
+                    flush();
                 End
-                
+
                 Float old_top = *top_ptr;
 
                 Float to_store = 0;
@@ -149,7 +149,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             End
 
             top_ptr = top_ptr + inc;
-            top_ptr_offset += inc;
+            top_ptr_offset = top_ptr_offset + inc;
         End
 
         {

@@ -308,6 +308,7 @@ template <typename... ts> struct Kernel {
   // Deconstructor
   ~Kernel() {
     #ifdef QPU_MODE
+      printf("Deconstructor kernel...")
       delete qpuCodeMem;
       disableQPUs();
     #endif

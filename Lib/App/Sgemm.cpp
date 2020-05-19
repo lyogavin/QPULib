@@ -362,7 +362,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc bottom");
 #endif
     SharedArray<float> bottom_shar(total * inch + padding);
-    memcpy_to_shared(&bottom_shar, bottom_blob, total, inctep, inch);
+    memcpy_to_shared(&bottom_shar, bottom_blob, total, incstep, inch);
 #ifdef DEBUG
     printf("alloc top");
 #endif

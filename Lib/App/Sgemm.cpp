@@ -361,7 +361,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc top");
 #endif
 
-    int padded_total = total + (total % 16 > 0 ? 16 - (total % 16) : 0)
+    int padded_total = total + (total % 16 > 0 ? 16 - (total % 16) : 0);
     SharedArray<float> top_shar(padded_total * outch + padding);
 
     for (int i =0; i<padded_total * outch + padding; i++){

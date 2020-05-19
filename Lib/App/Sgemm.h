@@ -5,7 +5,7 @@
 
 #include <QPULib_external.h>
 
-typedef Kernel<Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Int, Int, Int, Int, Int, Int, Int> SgemmKernel;
+typedef Kernel<Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Int, Int, Int, Int, Int, Int, Int, Int, Int> SgemmKernel;
 
 //Kernel<Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Ptr<Float>, Int, Int, Int, Int, Int, Int>
 

@@ -290,10 +290,16 @@ void init_qpulib_sgemm()
 
 
 
-void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned size)
+void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned total, unsigned cstep, unsigned c)
 {
-    for (int i =0; i<size; i++){
-        (*dest)[i] = src[i];
+    int j = 0;
+    for (int i =0; i<total*c; i++){
+        (*dest)[i] = src[j];
+        if (i % cstep == total - 1){
+            j+= cstep - total + 1;
+        } else {
+            j++;
+        }
 #ifdef DEBUG
         printf("%f\t", src[i]);
 #endif
@@ -340,7 +346,7 @@ void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned padded_to
 
 void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, float* bias,
     float* debug_output, int debug_output_size,
-    int w, int h, int inch, int outch, int elemsize)
+    int w, int h, int inch, int outch, int incstep, int outcstep, int elemsize)
 {
     int padding = 16;
     int total = w * h;
@@ -356,7 +362,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc bottom");
 #endif
     SharedArray<float> bottom_shar(total * inch + padding);
-    memcpy_to_shared(&bottom_shar, bottom_blob, total * inch);
+    memcpy_to_shared(&bottom_shar, bottom_blob, total, inctep, inch);
 #ifdef DEBUG
     printf("alloc top");
 #endif

@@ -12,7 +12,7 @@
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                             Ptr<Float> debug_output_buffer, Int debug_output_size,
-                                   Int w, Int h, Int inch, Int outch, Int elemsize)
+                                   Int w, Int h, Int padded_total, Int inch, Int outch, Int elemsize)
 {
     //Ptr<Float> debug_output = debug_output_buffer + index();
     // 1. multiple QPU...
@@ -59,7 +59,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Print("\n");
         End
 
-        Int offset = k* w* h;
+        Int offset = k* padded_total;
         Int top_ptr_offset = 0;
         Int last_top_ptr_offset = 0;
         top_ptr = top + index() + offset;
@@ -127,9 +127,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Int exceeding_len = i + inc - (w * h);
                 // check if address trying to read overlap with last store, if so, need a flush
 
-                If (last_top_ptr_offset - top_ptr_offset < 16 && top_ptr_offset - last_top_ptr_offset < 16)
-                    flush();
-                End
+                //If (last_top_ptr_offset - top_ptr_offset < 16 && top_ptr_offset - last_top_ptr_offset < 16)
+                //    flush();
+                //End
 
                 Float old_top = *top_ptr;
 
@@ -326,6 +326,17 @@ void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned size)
         dest[i] = (*src)[i];
     }
 }
+void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned padded_total, unsigned total, unsigned outch) {
+
+    int p_dest = 0, p_src=0;
+    for (int i =0; i<outch; i++){
+        p_src = i * padded_total;
+        for (int j =0; j<total; j++){
+            dest[p_dest++] = (*src)[p_src++];
+        }
+    }
+}
+
 
 void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, float* bias,
     float* debug_output, int debug_output_size,
@@ -349,9 +360,11 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 #ifdef DEBUG
     printf("alloc top");
 #endif
-    SharedArray<float> top_shar(total * outch + padding);
 
-    for (int i =0; i<total * outch + padding; i++){
+    int padded_total = total + (total % 16 > 0 ? 16 - (total % 16) : 0)
+    SharedArray<float> top_shar(padded_total * outch + padding);
+
+    for (int i =0; i<padded_total * outch + padding; i++){
         top_shar[i] = 0;
     }
 
@@ -379,9 +392,9 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     // Invoke kernel
     k->setNumQPUs(NQPUS);
 
-    (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, inch, outch, elemsize);
+    (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, padded_total, inch, outch, elemsize);
 
-    memcpy_from_shared(top_blob, &top_shar, total*outch);
+    memcpy_from_shared(top_blob, &top_shar, padded_total, total, outch);
 
     if (debug_output_size > 0)
         memcpy_from_shared(debug_output, &debug_output_shar, debug_output_size);

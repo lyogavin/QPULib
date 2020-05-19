@@ -379,12 +379,12 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc kernel");
 #endif
     SharedArray<float> kernel_shar(inch * outch + padding);
-    memcpy_to_shared(&kernel_shar, kernel, inch * outch);
+    memcpy_to_shared(&kernel_shar, kernel, inch * outch, inch * outch, 1);
 #ifdef DEBUG
     printf("alloc bias");
 #endif
     SharedArray<float> bias_shar(outch + padding);
-    memcpy_to_shared(&bias_shar, bias, outch);
+    memcpy_to_shared(&bias_shar, bias, outch, outch, 1);
 
     SharedArray<float> debug_output_shar(debug_output_size > 0? debug_output_size: 10 );
 

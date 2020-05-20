@@ -295,7 +295,7 @@ void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned total, unsi
     int j = 0;
     for (int i =0; i<total*c; i++){
         (*dest)[i] = src[j];
-        if (i % cstep == total - 1){
+        if (j % cstep == total - 1){
             j+= cstep - total + 1;
         } else {
             j++;
@@ -332,11 +332,12 @@ void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned size)
         dest[i] = (*src)[i];
     }
 }
-void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned padded_total, unsigned total, unsigned outch) {
+void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned padded_total, unsigned total, unsigned outcstep, unsigned outch) {
 
     int p_dest = 0, p_src=0;
     for (int i =0; i<outch; i++){
         p_src = i * padded_total;
+        p_dest = i * outcstep;
         for (int j =0; j<total; j++){
             dest[p_dest++] = (*src)[p_src++];
         }
@@ -400,7 +401,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, padded_total, inch, outch, elemsize);
 
-    memcpy_from_shared(top_blob, &top_shar, padded_total, total, outch);
+    memcpy_from_shared(top_blob, &top_shar, padded_total, total, outcstep, outch);
 
     if (debug_output_size > 0)
         memcpy_from_shared(debug_output, &debug_output_shar, debug_output_size);

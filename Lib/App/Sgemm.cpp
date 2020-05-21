@@ -4,7 +4,7 @@
 #include <ctime>
 
 
-
+//#define OLD_OVERWRITE
 #define output(f)  *(debug_output) = f; debug_output = debug_output + 16;
 
 
@@ -131,6 +131,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 //    flush();
                 //End
 
+#ifdef OLD_OVERWRITE
                 Float old_top = *top_ptr;
 
                 Float to_store = 0;
@@ -140,7 +141,9 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 Where(index() >= 16 - exceeding_len)
                     to_store = old_top;
                 End
-
+#else
+                Float to_store = sum;
+#endif
                 store(to_store, top_ptr);
                 last_top_ptr_offset = top_ptr_offset;
             Else

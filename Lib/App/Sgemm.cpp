@@ -284,11 +284,14 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
 
 static SgemmKernel* compiled_sgemm_kernel = NULL;
 
+static timeval tvTotal;
+
 void init_qpulib_sgemm()
 {
     if (compiled_sgemm_kernel == NULL) {
         static SgemmKernel instance = compile(conv1x1s1_sgemm_qpulib);
         compiled_sgemm_kernel = &instance;
+        timerclear(&tvTotal);
     }
 }
 
@@ -368,7 +371,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     int NQPUS = 12;
 
     // Timestamps
-    timeval tvStart, tvEnd, tvDiff, tvDiff1, tvTotal;
+    timeval tvStart, tvEnd, tvDiff, tvDiff1;
 
     gettimeofday(&tvStart, NULL);
 

@@ -368,7 +368,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     int NQPUS = 12;
 
     // Timestamps
-    timeval tvStart, tvEnd, tvDiff;
+    timeval tvStart, tvEnd, tvDiff, tvDiff1;
 
     gettimeofday(&tvStart, NULL);
 
@@ -429,11 +429,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     SharedArray<float> debug_output_shar(debug_output_size > 0? debug_output_size: 10 );
 
     gettimeofday(&tvEnd, NULL);
-    timersub(&tvEnd, &tvStart, &tvDiff);
-#ifdef DEBUGMEM
-
-    printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
-#endif
+    timersub(&tvEnd, &tvStart, &tvDiff1);
     // Compile kernel
     SgemmKernel* k = compiled_sgemm_kernel;
 
@@ -443,10 +439,21 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, padded_total, inch, outch, elemsize);
 
 #ifdef DEBUGMEM
+
+    gettimeofday(&tvStart, NULL);
+#endif
     memcpy_from_shared(top_blob, &top_shar, padded_total, total, outcstep, outch);
 
+#ifdef DEBUGMEM
     if (debug_output_size > 0)
         memcpy_from_shared(debug_output, &debug_output_shar, debug_output_size);
+
+    gettimeofday(&tvEnd, NULL);
+    timersub(&tvEnd, &tvStart, &tvDiff);
+    timeradd(&tvDiff, &tvDiff1, &tvDiff);
+
+
+    printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 #endif
 
 }

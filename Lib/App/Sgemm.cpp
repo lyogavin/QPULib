@@ -353,7 +353,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     int padding = 16;
     static int bottom_presize = 810016 + padding;// 150 * 150 * 32 + padding;
     static int top_presize = 2161168 + padding;
-    static int kernel_presize = 153616 + padding;
+    static int kernel_presize = 409616 + padding;
     static int bias_presize = 1296 + padding;
     static SharedArray<float> bottom_shar(bottom_presize);
     static SharedArray<float> top_shar(top_presize);
@@ -426,8 +426,10 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     gettimeofday(&tvEnd, NULL);
     timersub(&tvEnd, &tvStart, &tvDiff);
-    printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
+#ifdef DEBUG
 
+    printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
+#endif
     // Compile kernel
     SgemmKernel* k = compiled_sgemm_kernel;
 

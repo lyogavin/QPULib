@@ -351,7 +351,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 {
     // preallocate shared array...
     int padding = 16;
-    static int bottom_presize = 150 * 150 * 32 + padding;
+    static int bottom_presize = 1000;// 150 * 150 * 32 + padding;
     static int top_presize = 150 * 150 * 16 + padding;
     static int kernel_presize = 384 * 64 + padding;
     static int bias_presize = 384 + padding;
@@ -373,8 +373,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc bottom");
 #endif
     //SharedArray<float> bottom_shar(total * inch + padding);
-    if (total * inch + padding < bottom_presize) {
-        printf("bottom preallocate size %d smaller than needed, reallocate: %d", bottom_presize, total * inch + padding);
+    if (total * inch + padding > bottom_presize) {
+        printf("bottom preallocate size %d smaller than needed, reallocate: %d\n", bottom_presize, total * inch + padding);
         bottom_presize = total * inch + padding;
         bottom_shar.dealloc();
         bottom_shar.alloc(bottom_presize);
@@ -386,8 +386,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     int padded_total = total + (total % 16 > 0 ? 16 - (total % 16) : 0);
     //SharedArray<float> top_shar(padded_total * outch + padding);
-    if (padded_total * outch + padding < top_presize) {
-        printf("top preallocate size %d smaller than needed, reallocate: %d", top_presize, padded_total * outch + padding);
+    if (padded_total * outch + padding > top_presize) {
+        printf("top preallocate size %d smaller than needed, reallocate: %d\n", top_presize, padded_total * outch + padding);
         top_presize = padded_total * outch + padding;
         top_shar.dealloc();
         top_shar.alloc(top_presize);
@@ -402,8 +402,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc kernel");
 #endif
     //SharedArray<float> kernel_shar(inch * outch + padding);
-    if (padded_total * outch + padding < kernel_presize) {
-        printf("kernel preallocate size %d smaller than needed, reallocate: %d", kernel_presize, inch * outch + padding);
+    if (padded_total * outch + padding > kernel_presize) {
+        printf("kernel preallocate size %d smaller than needed, reallocate: %d\n", kernel_presize, inch * outch + padding);
         kernel_presize = inch * outch + padding;
         kernel_shar.dealloc();
         kernel_shar.alloc(kernel_presize);
@@ -414,8 +414,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc bias");
 #endif
     //SharedArray<float> bias_shar(outch + padding);
-    if (outch + padding < kernel_presize) {
-        printf("bias preallocate size %d smaller than needed, reallocate: %d", bias_presize, outch + padding);
+    if (outch + padding > bias_presize) {
+        printf("bias preallocate size %d smaller than needed, reallocate: %d\n", bias_presize, outch + padding);
         bias_presize = outch + padding;
         bias_shar.dealloc();
         bias_shar.alloc(bias_presize);

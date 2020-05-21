@@ -351,10 +351,10 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 {
     // preallocate shared array...
     int padding = 16;
-    static int bottom_presize = 1000;// 150 * 150 * 32 + padding;
-    static int top_presize = 150 * 150 * 16 + padding;
-    static int kernel_presize = 384 * 64 + padding;
-    static int bias_presize = 384 + padding;
+    static int bottom_presize = 720016 + padding;// 150 * 150 * 32 + padding;
+    static int top_presize = 2161168 + padding;
+    static int kernel_presize = 153616 + padding;
+    static int bias_presize = 1296 + padding;
     static SharedArray<float> bottom_shar(bottom_presize);
     static SharedArray<float> top_shar(top_presize);
     static SharedArray<float> kernel_shar(kernel_presize);

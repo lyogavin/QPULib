@@ -18,8 +18,10 @@ void invoke(
   // Number of 32-bit words needed for kernel code & parameters
   int numWords = qpuCodeMemOffset + (params->numElems+2)*numQPUs + 2*numQPUs;
 
+#ifdef DEBUG_INFO
   printf("qpuCodeMemOffset: %d, numElems: %d, numQPUs: %d codeMem.size: %d\n", qpuCodeMemOffset, params->numElems, numQPUs, codeMem.size);
   printf("codeMem.getPointer(): 0x%.8X, codeMem: 0x%.8X, \n", codeMem.getPointer(), &codeMem);
+#endif
   assert(numWords < codeMem.size);
 
   // Pointer to start of code

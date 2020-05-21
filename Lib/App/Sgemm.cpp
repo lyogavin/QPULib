@@ -368,7 +368,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     int NQPUS = 12;
 
     // Timestamps
-    timeval tvStart, tvEnd, tvDiff, tvDiff1;
+    timeval tvStart, tvEnd, tvDiff, tvDiff1, tvTotal;
 
     gettimeofday(&tvStart, NULL);
 
@@ -451,9 +451,10 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     gettimeofday(&tvEnd, NULL);
     timersub(&tvEnd, &tvStart, &tvDiff);
     timeradd(&tvDiff, &tvDiff1, &tvDiff);
+    timeradd(&tvDiff, &tvTotal, &tvTotal);
 
 
-    printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
+    printf("memory operation time: %ld.%06lds, total accumulated time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec, tvTotal.tv_sec, tvTotal.tv_usec);
 #endif
 
 }

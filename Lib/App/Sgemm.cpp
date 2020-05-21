@@ -9,6 +9,7 @@
 
 
 //#define DEBUG
+#define DEBUGMEM
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                             Ptr<Float> debug_output_buffer, Int debug_output_size,
@@ -429,7 +430,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     gettimeofday(&tvEnd, NULL);
     timersub(&tvEnd, &tvStart, &tvDiff);
-#ifdef DEBUG
+#ifdef DEBUGMEM
 
     printf("memory operation time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 #endif
@@ -441,9 +442,11 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, padded_total, inch, outch, elemsize);
 
+#ifdef DEBUGMEM
     memcpy_from_shared(top_blob, &top_shar, padded_total, total, outcstep, outch);
 
     if (debug_output_size > 0)
         memcpy_from_shared(debug_output, &debug_output_shar, debug_output_size);
+#endif
 
 }

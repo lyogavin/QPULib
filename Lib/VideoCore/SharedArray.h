@@ -55,6 +55,10 @@ template <typename T> class SharedArray {
     return address*4;
   }
 
+  T* getArmBase() {
+    return (T*) &emuHeap[address];
+  }
+
   T* getPointer() {
     return (T*) &emuHeap[address];
   }
@@ -130,6 +134,9 @@ template <typename T> class SharedArray {
 
   T* getPointer() {
     return (T*) gpu_base;
+  }
+  T* getArmBase() {
+    return (T*) arm_base;
   }
 
   // Deallocation

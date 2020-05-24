@@ -109,9 +109,10 @@ int main()
   printf("test memcpy...\n");
 
   SharedArray<float> array(w*h*inch);
-  memcpy(array.getPointer(), bot, w*h*inch * sizeof(float));
+  printf("memcpy to arm base: 0x%.8X, from: 0x%.8X...\n", array.getArmBase(), bot);
+  memcpy(array.getArmBase(), bot, w*h*inch*4 );
 
-  float memcpy_diff = get_diff(array.getPointer(), bot, w*h*inch);
+  float memcpy_diff = get_diff(array.getArmBase(), bot, w*h*inch);
   printf("test memcpy diff: %f...\n", memcpy_diff);
 
 

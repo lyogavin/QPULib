@@ -442,7 +442,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     // Invoke kernel
     k->setNumQPUs(NQPUS);
 
-    (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, padded_total, inch, outch, elemsize);
+    (*k)(&bottom_shar, &top_shar, &kernel_shar, &bias_shar, &debug_output_shar, debug_output_size, w, h, incstep, padded_total, inch, outch, elemsize);
 
 #ifdef DEBUGMEM
 

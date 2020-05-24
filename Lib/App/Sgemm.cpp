@@ -345,9 +345,10 @@ void memcpy_from_shared(float* dest, SharedArray<float>* src, unsigned padded_to
     for (int i =0; i<outch; i++){
         p_src = i * padded_total;
         p_dest = i * outcstep;
-        for (int j =0; j<total; j++){
-            dest[p_dest++] = (*src)[p_src++];
-        }
+        memcpy(dest + p_dest, src->getArmBase() + p_src, 4 * total);
+        //for (int j =0; j<total; j++){
+        //    dest[p_dest++] = (*src)[p_src++];
+        //}
     }
 }
 
@@ -392,7 +393,7 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc top");
 #endif
 
-    int padded_total = outcstep;//total + (total % 16 > 0 ? 16 - (total % 16) : 0);
+    int padded_total = total + (total % 16 > 0 ? 16 - (total % 16) : 0);
     //SharedArray<float> top_shar(padded_total * outch + padding);
     if (padded_total * outch + padding > top_presize) {
         printf("top preallocate size %d smaller than needed, reallocate: %d\n", top_presize, padded_total * outch + padding);
@@ -448,8 +449,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     gettimeofday(&tvStart, NULL);
 #endif
-    //memcpy_from_shared(top_blob, &top_shar, padded_total, total, outcstep, outch);
-    memcpy(top_blob, top_shar.getArmBase(), outcstep * outch * 4);
+    memcpy_from_shared(top_blob, &top_shar, padded_total, total, outcstep, outch);
+    //memcpy(top_blob, top_shar.getArmBase(), outcstep * outch * 4);
 
 #ifdef DEBUGMEM
     if (debug_output_size > 0)

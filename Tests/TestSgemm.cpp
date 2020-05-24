@@ -81,7 +81,7 @@ int main()
   const float THETA = (float) 3.14159;
 
   //const int w = 2, h=2, inch=2, outch=2,elemsize=4;
-  const int w = 150, h=150, inch=16, outch=96,elemsize=4;
+  const int w = 160, h=160, inch=16, outch=96,elemsize=4;
   //const int w = 150, h=150, inch=4, outch=4,elemsize=4;
 
   float* bot = new float[w*h*inch];

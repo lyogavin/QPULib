@@ -105,6 +105,20 @@ int main()
 
 
 
+  // test memcpy...
+  printf("test memcpy...\n");
+
+  SharedArray<float> array(w*h*inch);
+  memcpy(array.getPointer(), bot, w*h*inch * sizeof(float));
+
+  float memcpy_diff = get_diff(array.getPointer(), bot, w*h*inch);
+  printf("test memcpy diff: %f...\n", memcpy_diff);
+
+
+
+
+
+
   gettimeofday(&tvStart, NULL);
 
   conv1x1s1_sgemm_cpu(bot, topcpu, ker, bias, w, h, inch, outch);

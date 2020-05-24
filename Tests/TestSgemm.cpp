@@ -66,6 +66,7 @@ void fill_rand(float* dest, int size)
     }
     //print_array(dest, size);
 }
+void memcpy_to_shared(SharedArray<float>* dest, float* src, unsigned total, unsigned cstep, unsigned c);
 
 
 int main()
@@ -116,6 +117,22 @@ int main()
   printf("test memcpy diff: %f...\n", memcpy_diff);
 
 
+  gettimeofday(&tvStart, NULL);
+  for(int i=0;i<1000;i++){
+    memcpy_to_shared(array, bot, w*h, w*h, inch);
+  }
+  gettimeofday(&tvEnd, NULL);
+  timersub(&tvEnd, &tvStart, &tvDiff);
+  printf("loop copy time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
+
+  gettimeofday(&tvStart, NULL);
+
+  for(int i=0;i<1000;i++){
+    memcpy(array.getArmBase(), bot, w*h*inch*4 );
+  }
+  gettimeofday(&tvEnd, NULL);
+  timersub(&tvEnd, &tvStart, &tvDiff);
+  printf("mem copy time: %ld.%06lds\n", tvDiff.tv_sec, tvDiff.tv_usec);
 
 
 

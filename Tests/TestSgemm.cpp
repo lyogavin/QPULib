@@ -119,7 +119,7 @@ int main()
 
   gettimeofday(&tvStart, NULL);
   for(int i=0;i<1000;i++){
-    memcpy_to_shared(array, bot, w*h, w*h, inch);
+    memcpy_to_shared(&array, bot, w*h, w*h, inch);
   }
   gettimeofday(&tvEnd, NULL);
   timersub(&tvEnd, &tvStart, &tvDiff);

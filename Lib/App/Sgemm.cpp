@@ -13,7 +13,7 @@
 
 void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel, Ptr<Float> bias,
                             Ptr<Float> debug_output_buffer, Int debug_output_size,
-                                   Int w, Int h, Int padded_total, Int inch, Int outch, Int elemsize)
+                                   Int w, Int h, Int instep, Int outstep, Int inch, Int outch, Int elemsize)
 {
     //Ptr<Float> debug_output = debug_output_buffer + index();
     // 1. multiple QPU...
@@ -60,7 +60,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             Print("\n");
         End
 
-        Int offset = k* padded_total;
+        Int offset = k* outstep;
         Int top_ptr_offset = 0;
         Int last_top_ptr_offset = 0;
         top_ptr = top + index() + offset;
@@ -87,7 +87,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
             For (Int j = 0, j < inch, j = j + 1)
 
                 gather(kernel_ptr + 1);
-                gather(bottom_ptr + w*h);
+                gather(bottom_ptr + instep);
 
                 receive(kernel_last);
                 receive(bottom_last);
@@ -113,7 +113,7 @@ void conv1x1s1_sgemm_qpulib(Ptr<Float> bottom, Ptr<Float> top, Ptr<Float> kernel
                 End
 
                 kernel_ptr = kernel_ptr + 1;
-                bottom_ptr = bottom_ptr + w*h;
+                bottom_ptr = bottom_ptr + instep;
             End
             receive(kernel_last);
             receive(bottom_last);
@@ -380,18 +380,19 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
     printf("alloc bottom");
 #endif
     //SharedArray<float> bottom_shar(total * inch + padding);
-    if (total * inch + padding > bottom_presize) {
-        printf("bottom preallocate size %d smaller than needed, reallocate: %d\n", bottom_presize, total * inch + padding);
-        bottom_presize = total * inch + padding;
+    if (incstep * inch + padding > bottom_presize) {
+        printf("bottom preallocate size %d smaller than needed, reallocate: %d\n", bottom_presize, incstep * inch + padding);
+        bottom_presize = incstep * inch + padding;
         bottom_shar.dealloc();
         bottom_shar.alloc(bottom_presize);
     }
-    memcpy_to_shared(&bottom_shar, bottom_blob, total, incstep, inch);
+    //memcpy_to_shared(&bottom_shar, bottom_blob, total, incstep, inch);
+    memcpy(bottom_shar.getArmBase(), bottom_blob, incstep * inch * 4);
 #ifdef DEBUG
     printf("alloc top");
 #endif
 
-    int padded_total = total + (total % 16 > 0 ? 16 - (total % 16) : 0);
+    int padded_total = outcstep;//total + (total % 16 > 0 ? 16 - (total % 16) : 0);
     //SharedArray<float> top_shar(padded_total * outch + padding);
     if (padded_total * outch + padding > top_presize) {
         printf("top preallocate size %d smaller than needed, reallocate: %d\n", top_presize, padded_total * outch + padding);
@@ -400,9 +401,9 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
         top_shar.alloc(top_presize);
     }
 
-    for (int i =0; i<padded_total * outch + padding; i++){
-        top_shar[i] = 0;
-    }
+    //for (int i =0; i<padded_total * outch + padding; i++){
+    //    top_shar[i] = 0;
+    //}
 
     //memcpy_to_shared(&top_shar, top_blob, total * outch);
 #ifdef DEBUG
@@ -416,7 +417,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
         kernel_shar.alloc(kernel_presize);
     }
 
-    memcpy_to_shared(&kernel_shar, kernel, inch * outch, inch * outch, 1);
+    //memcpy_to_shared(&kernel_shar, kernel, inch * outch, inch * outch, 1);
+    memcpy(kernel_shar.getArmBase(), kernel, outch * inch * 4);
 #ifdef DEBUG
     printf("alloc bias");
 #endif
@@ -427,7 +429,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
         bias_shar.dealloc();
         bias_shar.alloc(bias_presize);
     }
-    memcpy_to_shared(&bias_shar, bias, outch, outch, 1);
+    //memcpy_to_shared(&bias_shar, bias, outch, outch, 1);
+    memcpy(bias_shar.getArmBase(), bias, outch * 4);
 
     SharedArray<float> debug_output_shar(debug_output_size > 0? debug_output_size: 10 );
 
@@ -445,7 +448,8 @@ void conv1x1s1_sgemm_qpu(float* bottom_blob, float* top_blob, float* kernel, flo
 
     gettimeofday(&tvStart, NULL);
 #endif
-    memcpy_from_shared(top_blob, &top_shar, padded_total, total, outcstep, outch);
+    //memcpy_from_shared(top_blob, &top_shar, padded_total, total, outcstep, outch);
+    memcpy(top_blob, top_shar.getArmBase(), outcstep * outch * 4);
 
 #ifdef DEBUGMEM
     if (debug_output_size > 0)
